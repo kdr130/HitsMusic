@@ -60,4 +60,5 @@ dependencies {
     compile 'com.google.android.gms:play-services-auth:10.2.1'
     compile 'pub.devrel:easypermissions:0.3.0'
     testCompile 'junit:junit:4.12'
+    compile 'com.android.support:recyclerview-v7:26.+'
 }
