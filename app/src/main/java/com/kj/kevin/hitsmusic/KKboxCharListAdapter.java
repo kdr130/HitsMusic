@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.kj.kevin.hitsmusic.model.Chart;
 
 import java.util.List;
@@ -50,10 +51,19 @@ public class KKboxCharListAdapter extends RecyclerView.Adapter<KKboxCharListAdap
     public void onBindViewHolder(ViewHolder holder, int position) {
         Log.d(TAG, "onBindViewHolder: ");
 
-        Chart chart = data.get(position);
+        final Chart chart = data.get(position);
 
         holder.title.setText(chart.getTitle());
         holder.description.setText(chart.getDescription());
+
+        Glide.with(holder.img.getContext()).load(chart.getImgUrl()).into(holder.img);
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "onClick: title: " + chart.getTitle());
+            }
+        });
     }
 
     @Override
