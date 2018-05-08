@@ -74,7 +74,7 @@ public class KKboxService extends Service {
         });
     }
 
-    private void getHitsPlayLists(String id, final OnTaskCompletedListener callback) {
+    public void getDetailPlayList(String id, final OnTaskCompletedListener callback) {
         Log.d(TAG, "getHitsPlayLists: id: " + id);
 
         api.getHitsPlaylistFetcher().playlistId = id;

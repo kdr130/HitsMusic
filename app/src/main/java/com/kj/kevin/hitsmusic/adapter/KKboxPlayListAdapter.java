@@ -1,5 +1,9 @@
-package com.kj.kevin.hitsmusic;
+package com.kj.kevin.hitsmusic.adapter;
 
+import android.content.Context;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,6 +13,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.kj.kevin.hitsmusic.R;
+import com.kj.kevin.hitsmusic.fragment.KKboxDetailPlayListFragment;
 import com.kj.kevin.hitsmusic.model.Chart;
 
 import java.util.List;
@@ -17,8 +23,8 @@ import java.util.List;
  * Created by Kevinkj_Lin on 2018/5/7.
  */
 
-public class KKboxCharListAdapter extends RecyclerView.Adapter<KKboxCharListAdapter.ViewHolder> {
-    public static final String TAG = "KKboxCharListAdapter";
+public class KKboxPlayListAdapter extends RecyclerView.Adapter<KKboxPlayListAdapter.ViewHolder> {
+    public static final String TAG = "KKboxPlayListAdapter";
 
     private List<Chart> data;
 
@@ -36,13 +42,13 @@ public class KKboxCharListAdapter extends RecyclerView.Adapter<KKboxCharListAdap
         }
     }
 
-    public KKboxCharListAdapter(List<Chart> list) {
+    public KKboxPlayListAdapter(List<Chart> list) {
         this.data = list;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_chart, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_playlist, parent, false);
 
         return new ViewHolder(view);
     }
@@ -62,6 +68,7 @@ public class KKboxCharListAdapter extends RecyclerView.Adapter<KKboxCharListAdap
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "onClick: title: " + chart.getTitle());
+                gotoKKboxDetailPlayListFragment(v.getContext(), chart);
             }
         });
     }
@@ -69,5 +76,16 @@ public class KKboxCharListAdapter extends RecyclerView.Adapter<KKboxCharListAdap
     @Override
     public int getItemCount() {
         return data.size();
+    }
+
+    private void gotoKKboxDetailPlayListFragment(Context context, Chart chart) {
+        Log.d(TAG, "gotoKKboxDetailPlayListFragment: ");
+
+        KKboxDetailPlayListFragment fragment = KKboxDetailPlayListFragment.newInstance(chart.getId());
+
+        FragmentManager manager = ((AppCompatActivity)context).getSupportFragmentManager();
+        FragmentTransaction transaction = manager.beginTransaction();
+        transaction.addToBackStack(null);
+        transaction.replace(R.id.container, fragment).commit();
     }
 }

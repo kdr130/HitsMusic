@@ -7,21 +7,12 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.kj.kevin.hitsmusic.KKboxCharListAdapter;
 import com.kj.kevin.hitsmusic.KKboxService;
 import com.kj.kevin.hitsmusic.R;
-import com.kj.kevin.hitsmusic.fragment.KKboxChartListFragment;
-import com.kj.kevin.hitsmusic.model.Chart;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.kj.kevin.hitsmusic.fragment.KKboxPlayListFragment;
 
 public class KKboxListActivity extends AppCompatActivity implements ServiceConnection {
     public static final String TAG = "KKboxListActivity";
@@ -53,7 +44,7 @@ public class KKboxListActivity extends AppCompatActivity implements ServiceConne
             @Override
             public void onCompleted(Exception e, JsonObject result) {
                 FragmentManager manager = getSupportFragmentManager();
-                KKboxChartListFragment fragment = KKboxChartListFragment.newInstance();
+                KKboxPlayListFragment fragment = KKboxPlayListFragment.newInstance();
                 manager.beginTransaction().add(R.id.container, fragment).commit();
             }
         });
