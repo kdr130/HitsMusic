@@ -14,7 +14,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.kj.kevin.hitsmusic.KKboxService;
 import com.kj.kevin.hitsmusic.R;
-import com.kj.kevin.hitsmusic.activity.KKboxListActivity;
 
 
 public class KKboxDetailPlayListFragment extends Fragment {
@@ -60,7 +59,7 @@ public class KKboxDetailPlayListFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         mDetailList = view.findViewById(R.id.detail_list);
-        mKKboxService = ((KKboxListActivity)getActivity()).getKkboxService();
+//        mKKboxService = ((KKboxListActivity)getActivity()).getKkboxService();
 
         initView();
     }

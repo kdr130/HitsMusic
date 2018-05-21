@@ -10,17 +10,22 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
+import com.kj.kevin.hitsmusic.api.AccessTokenAPI;
 
 import java.io.IOException;
 
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import okhttp3.Credentials;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
-import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
@@ -36,7 +41,7 @@ public class KKboxService extends Service {
 
     // https://docs-zhtw.kkbox.codes/v1.1/reference#newhitsplaylists-playlist_id-tracks
     KKboxBinder kkboxBinder = new KKboxBinder();
-    private AccessTokenApi accessTokenApi;
+    private AccessTokenAPI accessTokenAPI;
 
     public interface OnTaskCompletedListener {
         void onCompleted(Exception e, JsonObject result);
@@ -79,19 +84,7 @@ public class KKboxService extends Service {
         Log.d(TAG, "KKboxService() ");
     }
 
-    public void initService(final OnTaskCompletedListener callback) {
-//        Auth auth = new Auth(KKBOX_CLIENT_ID, KKBOX_CLIENT_SECRET, this);
-//        auth.getClientCredentialsFlow().fetchAccessToken().setCallback(new FutureCallback<JsonObject>() {
-//            @Override
-//            public void onCompleted(Exception e, JsonObject result) {
-//                mKKboxAccessToken = result.get("access_token").getAsString();
-//
-//                Log.d(TAG, "onCompleted: access_token: " + mKKboxAccessToken);
-//                api = new Api(mKKboxAccessToken, "TW", KKboxService.this);
-//
-//                callback.onCompleted(e, result);
-//            }
-//        });
+    public void initService(OnTaskCompletedListener callback) {
 
         // use OkHttpClient to set Header
         OkHttpClient httpClient = new OkHttpClient.Builder()
@@ -113,26 +106,41 @@ public class KKboxService extends Service {
                 // using Gson To Convert Json from server's response
                 // 否則會出現 com.google.gson.stream.MalformedJsonException: Use JsonReader.setLenient(true) to accept malformed JSON at line 1 column 1 path $
                 .addConverterFactory(GsonConverterFactory.create(gson))
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 // 使用 OkHttpClient 來設定 Header
                 .client(httpClient)
                 .build();
 
-        accessTokenApi = retrofit.create(AccessTokenApi.class);
+        accessTokenAPI = retrofit.create(AccessTokenAPI.class);
 
-        accessTokenApi.getAccessToken("client_credentials").enqueue(new Callback<JsonObject>() {
-            @Override
-            public void onResponse(Call<JsonObject> call, retrofit2.Response<JsonObject> response) {
-                Log.d(TAG, "onResponse: " + response.body());
+        accessTokenAPI.getAccessToken("client_credentials")
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Observer<JsonObject>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+                        Log.e(TAG, "onSubscribe: ");
+                    }
 
-                mKKboxAccessToken = response.body().get("access_token").getAsString();
-                Log.d(TAG, "onResponse: mKKboxAccessToken: " + mKKboxAccessToken);
-            }
+                    @Override
+                    public void onNext(@NonNull JsonObject jsonObject) {
 
-            @Override
-            public void onFailure(Call<JsonObject> call, Throwable t) {
-                Log.d(TAG, "onFailure: " + t.toString());
-            }
-        });
+                        mKKboxAccessToken = jsonObject.get("access_token").getAsString();
+
+                        Log.e(TAG, "onResponse: mKKboxAccessToken: " + mKKboxAccessToken);
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        Log.e(TAG, "onError: " + e.toString());
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        Log.e(TAG, "onComplete: ");
+//                        callback.onCompleted();
+                    }
+                });
     }
 
     private void getHitsPlayLists(final OnTaskCompletedListener callback) {
