@@ -1,17 +1,19 @@
 package com.kj.kevin.hitsmusic.model;
 
+import com.google.gson.Gson;
+
 /**
  * Created by Kevinkj_Lin on 2018/5/7.
  */
 
-public class Chart {
+public class PlayListInfo {
     private String id;
     private String title;
     private String description;
     private String imgUrl;
     private String chartUrl;
 
-    public Chart(String id, String title, String description, String imgUrl, String chartUrl) {
+    public PlayListInfo(String id, String title, String description, String imgUrl, String chartUrl) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -57,5 +59,11 @@ public class Chart {
 
     public void setChartUrl(String chartUrl) {
         this.chartUrl = chartUrl;
+    }
+
+    @Override
+    public String toString() {
+        Gson gson = new Gson();
+        return gson.toJson(this);
     }
 }

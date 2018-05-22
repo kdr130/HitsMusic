@@ -17,7 +17,7 @@ import com.google.gson.JsonObject;
 import com.kj.kevin.hitsmusic.KKboxService;
 import com.kj.kevin.hitsmusic.R;
 import com.kj.kevin.hitsmusic.adapter.KKboxPlayListAdapter;
-import com.kj.kevin.hitsmusic.model.Chart;
+import com.kj.kevin.hitsmusic.model.PlayListInfo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -81,13 +81,13 @@ public class KKboxPlayListFragment extends Fragment {
                 if (data != null) {
                     JsonObject object11 = data.get(0).getAsJsonObject();
                     Log.d(TAG, "onCompleted: [0]: " + object11.toString());
-                    List<Chart> list = new ArrayList<>();
+                    List<PlayListInfo> list = new ArrayList<>();
                     for (int i = 0; i < data.size(); i++) {
                         JsonObject object = data.get(i).getAsJsonObject();
 //                        Log.d(TAG, "onCompleted: no: " + (i+1));
 //                        Log.d(TAG, "onCompleted: title: " + object.get("title").getAsString());
 //                        Log.d(TAG, "onCompleted: id: " + object.get("id").getAsString());
-                        list.add(new Chart(object.get("id").getAsString(), object.get("title").getAsString(),
+                        list.add(new PlayListInfo(object.get("id").getAsString(), object.get("title").getAsString(),
                                 object.get("description").getAsString(), object.get("images").getAsJsonArray().get(0).getAsJsonObject().get("url").getAsString(),
                                 object.get("url").getAsString()));
                     }

@@ -124,7 +124,6 @@ public class KKboxService extends Service {
 
                     @Override
                     public void onNext(@NonNull JsonObject jsonObject) {
-
                         mKKboxAccessToken = jsonObject.get("access_token").getAsString();
 
                         Log.e(TAG, "onResponse: mKKboxAccessToken: " + mKKboxAccessToken);

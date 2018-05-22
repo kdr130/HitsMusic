@@ -15,7 +15,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.kj.kevin.hitsmusic.R;
 import com.kj.kevin.hitsmusic.fragment.KKboxDetailPlayListFragment;
-import com.kj.kevin.hitsmusic.model.Chart;
+import com.kj.kevin.hitsmusic.model.PlayListInfo;
 
 import java.util.List;
 
@@ -26,7 +26,7 @@ import java.util.List;
 public class KKboxPlayListAdapter extends RecyclerView.Adapter<KKboxPlayListAdapter.ViewHolder> {
     public static final String TAG = "KKboxPlayListAdapter";
 
-    private List<Chart> data;
+    private List<PlayListInfo> data;
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         private TextView title;
@@ -42,7 +42,7 @@ public class KKboxPlayListAdapter extends RecyclerView.Adapter<KKboxPlayListAdap
         }
     }
 
-    public KKboxPlayListAdapter(List<Chart> list) {
+    public KKboxPlayListAdapter(List<PlayListInfo> list) {
         this.data = list;
     }
 
@@ -57,18 +57,18 @@ public class KKboxPlayListAdapter extends RecyclerView.Adapter<KKboxPlayListAdap
     public void onBindViewHolder(ViewHolder holder, int position) {
         Log.d(TAG, "onBindViewHolder: ");
 
-        final Chart chart = data.get(position);
+        final PlayListInfo playListInfo = data.get(position);
 
-        holder.title.setText(chart.getTitle());
-        holder.description.setText(chart.getDescription());
+        holder.title.setText(playListInfo.getTitle());
+        holder.description.setText(playListInfo.getDescription());
 
-        Glide.with(holder.img.getContext()).load(chart.getImgUrl()).into(holder.img);
+        Glide.with(holder.img.getContext()).load(playListInfo.getImgUrl()).into(holder.img);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(TAG, "onClick: title: " + chart.getTitle());
-                gotoKKboxDetailPlayListFragment(v.getContext(), chart);
+                Log.d(TAG, "onClick: title: " + playListInfo.getTitle());
+                gotoKKboxDetailPlayListFragment(v.getContext(), playListInfo);
             }
         });
     }
@@ -78,10 +78,10 @@ public class KKboxPlayListAdapter extends RecyclerView.Adapter<KKboxPlayListAdap
         return data.size();
     }
 
-    private void gotoKKboxDetailPlayListFragment(Context context, Chart chart) {
+    private void gotoKKboxDetailPlayListFragment(Context context, PlayListInfo playListInfo) {
         Log.d(TAG, "gotoKKboxDetailPlayListFragment: ");
 
-        KKboxDetailPlayListFragment fragment = KKboxDetailPlayListFragment.newInstance(chart.getId());
+        KKboxDetailPlayListFragment fragment = KKboxDetailPlayListFragment.newInstance(playListInfo.getId());
 
         FragmentManager manager = ((AppCompatActivity)context).getSupportFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
