@@ -11,8 +11,14 @@ import com.kj.kevin.hitsmusic.R;
 import com.kj.kevin.hitsmusic.api.API;
 import com.kj.kevin.hitsmusic.model.PlayListInfo;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class KKboxListActivity extends AppCompatActivity {
     public static final String TAG = "KKboxListActivity";
+
+    private List<PlayListInfo> mNewHitsPlaylist = new ArrayList<>();
+    private List<PlayListInfo> mChartPlaylist = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,14 +38,20 @@ public class KKboxListActivity extends AppCompatActivity {
                     @Override
                     public void onNext(PlayListInfo playListInfo) {
                         Log.e(TAG, "onNext: " + playListInfo.getTitle());
+                        mNewHitsPlaylist.add(playListInfo);
                     }
                 }));
-
 
                 ApiMethods.getChart(new MyObserver<PlayListInfo>("getChart", new MyObserver.MyObserverNextListener<PlayListInfo>() {
                     @Override
                     public void onNext(PlayListInfo playListInfo) {
                         Log.e(TAG, "onNext: " + playListInfo.getTitle());
+                        mChartPlaylist.add(playListInfo);
+                    }
+                }, new MyObserver.MyObserverCompleteListener() {
+                    @Override
+                    public void onComplete() {
+                        Log.e(TAG, "onComplete: !!!" );
                     }
                 }));
 

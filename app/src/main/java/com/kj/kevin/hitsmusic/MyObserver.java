@@ -14,15 +14,29 @@ public class MyObserver<T> implements Observer<T> {
     private static final String TAG = "MyObserver";
 
     private String mName;
-    private MyObserverNextListener nextListener;
+    private MyObserverNextListener mNextListener;
+    private MyObserverCompleteListener mCompleteListener;
 
     public interface MyObserverNextListener<T> {
         void onNext(T t);
     }
 
-    public MyObserver(String observerName, MyObserverNextListener listener) {
+    public interface MyObserverCompleteListener {
+        void onComplete();
+    }
+
+    public MyObserver(String observerName, MyObserverNextListener nextListener) {
+        this(observerName, nextListener, null);
+    }
+
+    public MyObserver(String observerName, MyObserverCompleteListener completeListener) {
+        this(observerName, null, completeListener);
+    }
+
+    public MyObserver(String observerName, MyObserverNextListener nextListener, MyObserverCompleteListener completeListener) {
         mName = observerName;
-        nextListener = listener;
+        mNextListener = nextListener;
+        mCompleteListener = completeListener;
     }
 
     @Override
@@ -33,7 +47,9 @@ public class MyObserver<T> implements Observer<T> {
     @Override
     public void onNext(@NonNull T t) {
         Log.e(TAG, "onNext: " + mName );
-        nextListener.onNext(t);
+        if (mNextListener != null) {
+            mNextListener.onNext(t);
+        }
     }
 
     @Override
@@ -43,6 +59,9 @@ public class MyObserver<T> implements Observer<T> {
 
     @Override
     public void onComplete() {
-
+        Log.e(TAG, "onComplete: " );
+        if (mCompleteListener != null) {
+            mCompleteListener.onComplete();
+        }
     }
 }
