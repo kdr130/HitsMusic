@@ -35,6 +35,7 @@ public class ApiMethods {
         ApiSubscribe(API.getAccessTokenService().getAccessToken("client_credentials"), observer);
     }
 
+    // 取得最新主題歌單列表
     public static void getNewHitsPlaylist(MyObserver <PlayListInfo> observer) {
         ApiSubscribe(API.getKKboxService().getNewHitsPlaylist("TW")
                 .flatMap(new Function<JsonObject, ObservableSource<?>>() {
@@ -52,6 +53,7 @@ public class ApiMethods {
                 , observer);
     }
 
+    // 取得歌曲排行榜列表
     public static void getChart(MyObserver <PlayListInfo> observer) {
         ApiSubscribe(API.getKKboxService().getCharts("TW")
                         .flatMap(new Function<JsonObject, ObservableSource<?>>() {

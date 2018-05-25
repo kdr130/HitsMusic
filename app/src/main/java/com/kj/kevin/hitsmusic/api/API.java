@@ -43,46 +43,6 @@ public class API {
         return accessTokenService;
     }
 
-//    private static class AuthenticationInterceptor implements Interceptor {
-//        private String authToken;
-//
-//        AuthenticationInterceptor(String token) {
-//            this.authToken = token;
-//        }
-//
-//        @Override
-//        public Response intercept(@NonNull Chain chain) throws IOException {
-//            Request original = chain.request();
-//
-//            Request.Builder builder = original.newBuilder()
-//                    .header("Authorization", authToken);
-//
-//            Request request = builder.build();
-//            return chain.proceed(request);
-//        }
-//    }
-
-//    private static class HeaderInterceptor implements Interceptor {
-//        // need to set Header
-//        // Authorization: Bearer Etz0AB/jBfAxcz6bgRZLkQ==
-//        //                Bearer mAccessToken
-//
-//        private String accessToken;
-//
-//        HeaderInterceptor(String token) {
-//            accessToken = token;
-//        }
-//
-//        @Override
-//        public Response intercept(@NonNull Chain chain) throws IOException {
-//            Request original = chain.request();
-//            original = original.newBuilder()
-//                    .addHeader("Authorization", "Bearer " + accessToken)
-//                    .build();
-//            return chain.proceed(original);
-//        }
-//    }
-
     private static class HeaderInterceptor implements Interceptor {
 
         private HashMap<String, String> map;

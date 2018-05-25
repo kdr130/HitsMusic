@@ -59,7 +59,7 @@ public class KKboxDetailPlayListFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         mDetailList = view.findViewById(R.id.detail_list);
-//        mKKboxService = ((KKboxListActivity)getActivity()).getKkboxService();
+//        mKKboxService = ((KKboxActivity)getActivity()).getKkboxService();
 
         initView();
     }
