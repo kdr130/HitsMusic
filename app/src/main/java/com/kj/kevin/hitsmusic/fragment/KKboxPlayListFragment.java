@@ -52,7 +52,7 @@ public class KKboxPlayListFragment extends Fragment {
                     FragmentTransaction transaction = manager.beginTransaction();
                     transaction.addToBackStack(null);
                     transaction.replace(R.id.container, kkboxDetailPlayListFragment);
-                    transaction.commit();
+                    transaction.commitAllowingStateLoss();
                 }
             }));
 

@@ -67,7 +67,7 @@ public class KKboxActivity extends AppCompatActivity {
                         FragmentManager manager = getSupportFragmentManager();
                         FragmentTransaction transaction = manager.beginTransaction();
                         transaction.add(R.id.container, kKboxPlayListCategoryFragment);
-                        transaction.commit();
+                        transaction.commitAllowingStateLoss();
 
                     }
                 }));
