@@ -41,7 +41,7 @@ public class KKboxActivity extends AppCompatActivity {
                 ApiMethods.getNewHitsPlaylist(new MyObserver<PlayListInfo>("getNewHitsPlaylist", new MyObserver.MyObserverNextListener<PlayListInfo>() {
                     @Override
                     public void onNext(PlayListInfo playListInfo) {
-                        Log.e(TAG, "onNext: " + playListInfo.getTitle());
+                        Log.e(TAG, "onNext: " + playListInfo.toString());
                         mNewHitsPlaylist.add(playListInfo);
                     }
                 }));
@@ -49,7 +49,7 @@ public class KKboxActivity extends AppCompatActivity {
                 ApiMethods.getChart(new MyObserver<PlayListInfo>("getChart", new MyObserver.MyObserverNextListener<PlayListInfo>() {
                     @Override
                     public void onNext(PlayListInfo playListInfo) {
-                        Log.e(TAG, "onNext: " + playListInfo.getTitle());
+                        Log.e(TAG, "onNext: " + playListInfo.toString());
                         mChartPlaylist.add(playListInfo);
                     }
                 }, new MyObserver.MyObserverCompleteListener() {

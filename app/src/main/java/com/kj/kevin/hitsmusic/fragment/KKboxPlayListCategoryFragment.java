@@ -4,6 +4,8 @@ package com.kj.kevin.hitsmusic.fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -25,11 +27,20 @@ public class KKboxPlayListCategoryFragment extends Fragment {
     private static final String ARG_MAP = "map";
 
     private HashMap<Integer, List<PlayListInfo>> mDataHashMap;
+    private List<Integer> mCategoryResIdList = new ArrayList<>();
     private RecyclerView mCategoryRecycleView;
     private OnCategoryClickedListener mCategoryClickedListener = new OnCategoryClickedListener() {
         @Override
         public void onCategoryClicked(int position) {
             Log.e(TAG, "onCategoryClicked: position: " + position);
+
+            KKboxPlayListFragment kKboxPlayListFragment = KKboxPlayListFragment.newInstance(mDataHashMap.get(mCategoryResIdList.get(position)));
+
+            FragmentManager manager = getFragmentManager();
+            FragmentTransaction transaction = manager.beginTransaction();
+            transaction.addToBackStack(null);
+            transaction.replace(R.id.container, kKboxPlayListFragment);
+            transaction.commit();
         }
     };
 
@@ -54,8 +65,10 @@ public class KKboxPlayListCategoryFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         if (getArguments() != null && getArguments().getSerializable(ARG_MAP) instanceof HashMap ) {
             mDataHashMap = (HashMap<Integer, List<PlayListInfo>>)getArguments().getSerializable(ARG_MAP);
+            mCategoryResIdList.addAll(mDataHashMap.keySet());
         }
     }
 
@@ -70,11 +83,8 @@ public class KKboxPlayListCategoryFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        List<Integer> categoryResIdList = new ArrayList<>();
-        categoryResIdList.addAll(mDataHashMap.keySet());
-
         mCategoryRecycleView = view.findViewById(R.id.category_list);
-        mCategoryRecycleView.setAdapter(new KKboxPlayListCategoryAdapter(categoryResIdList, mCategoryClickedListener));
+        mCategoryRecycleView.setAdapter(new KKboxPlayListCategoryAdapter(mCategoryResIdList, mCategoryClickedListener));
         mCategoryRecycleView.setLayoutManager(new LinearLayoutManager(getActivity()));
         // 使用 Support Library 內建給 RecyclerView 的項目間隔線
         mCategoryRecycleView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL));

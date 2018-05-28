@@ -4,7 +4,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.kj.kevin.hitsmusic.R;
@@ -22,12 +21,10 @@ public class KKboxPlayListCategoryAdapter extends RecyclerView.Adapter<KKboxPlay
     private KKboxPlayListCategoryFragment.OnCategoryClickedListener mListener;
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
-        private RelativeLayout layout;
         private TextView title;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            layout = itemView.findViewById(R.id.category);
             title = itemView.findViewById(R.id.title);
         }
     }
@@ -46,7 +43,7 @@ public class KKboxPlayListCategoryAdapter extends RecyclerView.Adapter<KKboxPlay
 
     @Override
     public void onBindViewHolder(KKboxPlayListCategoryAdapter.ViewHolder holder, final int position) {
-        holder.layout.setOnClickListener(new View.OnClickListener() {
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 mListener.onCategoryClicked(position);

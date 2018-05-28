@@ -6,6 +6,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.kj.kevin.hitsmusic.api.API;
 import com.kj.kevin.hitsmusic.model.PlayListInfo;
+import com.kj.kevin.hitsmusic.model.SongInfo;
 
 import java.lang.reflect.Type;
 import java.util.List;
@@ -71,5 +72,20 @@ public class ApiMethods {
                 , observer);
     }
 
+    // 根據 playListId 取得詳細的歌單資訊
+    public static void getDetailPlayList(String playListId, MyObserver <SongInfo> observer) {
+        ApiSubscribe(API.getKKboxService().getDetailPlayList(playListId, "TW")
+                .flatMap(new Function<JsonObject, ObservableSource<?>>() {
+                    @Override
+                    public ObservableSource<?> apply(@NonNull JsonObject jsonObject) throws Exception {
+                        JsonArray jsonArray = jsonObject.get("data").getAsJsonArray();
 
+                        List<SongInfo> songInfos;
+                        Type listType = new TypeToken<List<SongInfo>>() {}.getType();
+                        songInfos = new Gson().fromJson(jsonArray, listType);
+
+                        return Observable.fromIterable(songInfos);
+                    }
+                }), observer);
+    }
 }

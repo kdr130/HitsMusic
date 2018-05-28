@@ -4,39 +4,66 @@ package com.kj.kevin.hitsmusic.fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.kj.kevin.hitsmusic.ApiMethods;
+import com.kj.kevin.hitsmusic.MyObserver;
 import com.kj.kevin.hitsmusic.R;
+import com.kj.kevin.hitsmusic.adapter.KKboxPlayListAdapter;
 import com.kj.kevin.hitsmusic.model.PlayListInfo;
+import com.kj.kevin.hitsmusic.model.SongInfo;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link KKboxPlayListFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class KKboxPlayListFragment extends Fragment {
     public static final String TAG = "KKboxPlayListFragment";
-    private static final String ARG_MAP = "map";
+    private static final String ARG_LIST = "list";
 
     private RecyclerView mList;
-    private HashMap<Integer, List<PlayListInfo>> mDataHashMap;
+    private List<PlayListInfo> mData;
+    private OnPlayListClickedListener mPlayListClickedListener = new OnPlayListClickedListener() {
+        @Override
+        public void onPlayListClicked(int position) {
+            Log.e(TAG, "onPlayListClicked: clicked position: " + position + ", id: " + mData.get(position).getId() );
+
+            List<SongInfo> mSongList = new ArrayList<>();
+
+            ApiMethods.getDetailPlayList(mData.get(position).getId(), new MyObserver<SongInfo>("getDetailPlayList", new MyObserver.MyObserverNextListener<SongInfo>() {
+                @Override
+                public void onNext(SongInfo songInfo) {
+                    Log.e(TAG, "onNext: name: " + songInfo.getName() );
+                }
+            }, new MyObserver.MyObserverCompleteListener() {
+                @Override
+                public void onComplete() {
+
+                }
+            }));
+
+        }
+    };
+
+    public interface OnPlayListClickedListener {
+        void onPlayListClicked(int position);
+    }
 
     public KKboxPlayListFragment() {
         // Required empty public constructor
     }
 
     // TODO: Rename and change types and number of parameters
-    public static KKboxPlayListFragment newInstance(HashMap<Integer, List<PlayListInfo>> map) {
+    public static KKboxPlayListFragment newInstance(List<PlayListInfo> data) {
         KKboxPlayListFragment fragment = new KKboxPlayListFragment();
         Bundle args = new Bundle();
-        args.putSerializable(ARG_MAP, map);
+        args.putSerializable(ARG_LIST, (ArrayList)data);
         fragment.setArguments(args);
 
         return fragment;
@@ -65,8 +92,8 @@ public class KKboxPlayListFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        if ( getArguments().getSerializable("data") instanceof HashMap ) {
-            mDataHashMap = (HashMap<Integer, List<PlayListInfo>>)getArguments().getSerializable("data");
+        if ( getArguments().getSerializable(ARG_LIST) instanceof ArrayList ) {
+            mData = (List<PlayListInfo>)getArguments().getSerializable(ARG_LIST);
         }
 
         mList = view.findViewById(R.id.list);
@@ -75,21 +102,10 @@ public class KKboxPlayListFragment extends Fragment {
     }
 
     private void initView() {
-//        List<PlayListInfo> list = new ArrayList<>();
-//        for (int i = 0; i < data.size(); i++) {
-//            JsonObject object = data.get(i).getAsJsonObject();
-////                        Log.d(TAG, "onCompleted: no: " + (i+1));
-////                        Log.d(TAG, "onCompleted: title: " + object.get("title").getAsString());
-////                        Log.d(TAG, "onCompleted: id: " + object.get("id").getAsString());
-//            list.add(new PlayListInfo(object.get("id").getAsString(), object.get("title").getAsString(),
-//                    object.get("description").getAsString(), object.get("images").getAsJsonArray().get(0).getAsJsonObject().get("url").getAsString(),
-//                    object.get("url").getAsString()));
-//        }
-//
-//        mList.setAdapter(new KKboxPlayListAdapter(list));
-//        // 需要設定 layoutManager
-//        mList.setLayoutManager(new LinearLayoutManager(getActivity()));
-//        // 使用 Support Library 內建給 RecyclerView 的項目間隔線
-//        mList.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL));
+        mList.setAdapter(new KKboxPlayListAdapter(mData, mPlayListClickedListener));
+        // 需要設定 layoutManager
+        mList.setLayoutManager(new LinearLayoutManager(getActivity()));
+        // 使用 Support Library 內建給 RecyclerView 的項目間隔線
+        mList.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL));
     }
 }

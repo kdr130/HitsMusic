@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 
 import io.reactivex.Observable;
 import retrofit2.http.GET;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 /**
@@ -20,4 +21,7 @@ public interface KKboxAPI {
     // 歌曲排行榜
     @GET("charts")
     Observable<JsonObject> getCharts(@Query("territory") String territory);
+
+    @GET("charts/{playListId}/tracks")
+    Observable<JsonObject> getDetailPlayList(@Path("playListId") String playListId, @Query("territory") String territory);
 }

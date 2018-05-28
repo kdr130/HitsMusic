@@ -1,69 +1,84 @@
 package com.kj.kevin.hitsmusic.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.Gson;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Kevinkj_Lin on 2018/5/7.
  */
 
-public class PlayListInfo {
+public class PlayListInfo implements Parcelable {
     private String id;
     private String title;
     private String description;
-    private String imgUrl;
-    private String chartUrl;
-
-    public PlayListInfo(String id, String title, String description, String imgUrl, String chartUrl) {
-        this.id = id;
-        this.title = title;
-        this.description = description;
-        this.imgUrl = imgUrl;
-        this.chartUrl = chartUrl;
-    }
+    private List<ImageInfo> images;
+    private String url;
 
     public String getId() {
         return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public String getTitle() {
         return title;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     public String getDescription() {
         return description;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getImgUrl() {
-        return imgUrl;
-    }
-
-    public void setImgUrl(String imgUrl) {
-        this.imgUrl = imgUrl;
-    }
-
     public String getChartUrl() {
-        return chartUrl;
+        return url;
     }
 
-    public void setChartUrl(String chartUrl) {
-        this.chartUrl = chartUrl;
+    public List<ImageInfo> getImages() {
+        return images;
     }
 
     @Override
     public String toString() {
         Gson gson = new Gson();
         return gson.toJson(this);
+    }
+
+    protected PlayListInfo(Parcel in) {
+        id = in.readString();
+        title = in.readString();
+        description = in.readString();
+
+        images = new ArrayList<>();
+        in.readList(images, null);
+
+        url = in.readString();
+    }
+
+    public static final Creator<PlayListInfo> CREATOR = new Creator<PlayListInfo>() {
+        @Override
+        public PlayListInfo createFromParcel(Parcel in) {
+            return new PlayListInfo(in);
+        }
+
+        @Override
+        public PlayListInfo[] newArray(int size) {
+            return new PlayListInfo[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(id);
+        parcel.writeString(title);
+        parcel.writeString(description);
+        parcel.writeList(images);
+        parcel.writeString(url);
     }
 }
