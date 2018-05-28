@@ -73,7 +73,7 @@ public class ApiMethods {
     }
 
     // 根據 playListId 取得詳細的歌單資訊
-    public static void getDetailPlayList(String playListId, MyObserver <SongInfo> observer) {
+    public static void getDetailPlayList(String playListId, MyObserver <List<SongInfo>> observer) {
         ApiSubscribe(API.getKKboxService().getDetailPlayList(playListId, "TW")
                 .flatMap(new Function<JsonObject, ObservableSource<?>>() {
                     @Override
@@ -84,7 +84,7 @@ public class ApiMethods {
                         Type listType = new TypeToken<List<SongInfo>>() {}.getType();
                         songInfos = new Gson().fromJson(jsonArray, listType);
 
-                        return Observable.fromIterable(songInfos);
+                        return Observable.just(songInfos);
                     }
                 }), observer);
     }

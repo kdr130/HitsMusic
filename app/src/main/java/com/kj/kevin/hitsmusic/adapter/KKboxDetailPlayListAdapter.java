@@ -1,45 +1,75 @@
 package com.kj.kevin.hitsmusic.adapter;
 
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.kj.kevin.hitsmusic.R;
+import com.kj.kevin.hitsmusic.model.ImageInfo;
+import com.kj.kevin.hitsmusic.model.SongInfo;
+
+import java.util.List;
 
 /**
  * Created by Kevinkj_Lin on 2018/5/8.
  */
 
-public class KKboxDetailPlayListAdapter extends RecyclerView.Adapter {
+public class KKboxDetailPlayListAdapter extends RecyclerView.Adapter<KKboxDetailPlayListAdapter.ViewHolder> {
+
+    private List<SongInfo> mSongList;
+
+    public KKboxDetailPlayListAdapter(List<SongInfo> data) {
+        mSongList = data;
+    }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView title;
-        private TextView description;
+        private TextView artist;
+        private TextView name;
         private ImageView img;
 
         public ViewHolder(View itemView) {
             super(itemView);
 
-            title = itemView.findViewById(R.id.title);
-            description = itemView.findViewById(R.id.description);
             img = itemView.findViewById(R.id.img);
+            artist = itemView.findViewById(R.id.artist);
+            name = itemView.findViewById(R.id.name);
         }
     }
 
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return null;
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_detail_playlist, parent, false);
+        return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, int position) {
+        SongInfo songInfo = mSongList.get(position);
 
+        if (songInfo == null) {
+            return;
+        }
+
+        if (songInfo.getAlbum() != null
+                && songInfo.getAlbum().getImages() != null
+                && songInfo.getAlbum().getImages().size() != 0
+                && songInfo.getAlbum().getImages().get(0) != null) {
+
+            ImageInfo imageInfo = songInfo.getAlbum().getImages().get(0);
+
+            Glide.with(holder.itemView.getContext()).load(imageInfo.getUrl()).into(holder.img);
+        }
+
+        holder.name.setText(songInfo.getName());
+        holder.artist.setText(songInfo.getAlbum().getArtist().getName());
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return mSongList.size();
     }
 }

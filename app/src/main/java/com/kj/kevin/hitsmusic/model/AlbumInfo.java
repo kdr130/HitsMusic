@@ -10,4 +10,16 @@ public class AlbumInfo {
     private String name;
     private List<ImageInfo> images;
     private ArtistInfo artist;
+
+    public String getName() {
+        return name;
+    }
+
+    public List<ImageInfo> getImages() {
+        return images;
+    }
+
+    public ArtistInfo getArtist() {
+        return artist;
+    }
 }

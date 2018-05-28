@@ -59,7 +59,7 @@ public class MyObserver<T> implements Observer<T> {
 
     @Override
     public void onComplete() {
-        Log.e(TAG, "onComplete: " );
+        Log.e(TAG, "onComplete: " +  mName );
         if (mCompleteListener != null) {
             mCompleteListener.onComplete();
         }

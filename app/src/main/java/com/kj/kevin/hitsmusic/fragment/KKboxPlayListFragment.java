@@ -4,6 +4,8 @@ package com.kj.kevin.hitsmusic.fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -27,24 +29,30 @@ public class KKboxPlayListFragment extends Fragment {
     public static final String TAG = "KKboxPlayListFragment";
     private static final String ARG_LIST = "list";
 
-    private RecyclerView mList;
+    private RecyclerView mPlayListRecyclerView;
     private List<PlayListInfo> mData;
     private OnPlayListClickedListener mPlayListClickedListener = new OnPlayListClickedListener() {
         @Override
         public void onPlayListClicked(int position) {
             Log.e(TAG, "onPlayListClicked: clicked position: " + position + ", id: " + mData.get(position).getId() );
 
-            List<SongInfo> mSongList = new ArrayList<>();
+            final List<SongInfo> songList = new ArrayList<>();
 
-            ApiMethods.getDetailPlayList(mData.get(position).getId(), new MyObserver<SongInfo>("getDetailPlayList", new MyObserver.MyObserverNextListener<SongInfo>() {
+            ApiMethods.getDetailPlayList(mData.get(position).getId(), new MyObserver<List<SongInfo>>("getDetailPlayList", new MyObserver.MyObserverNextListener<List<SongInfo>>() {
                 @Override
-                public void onNext(SongInfo songInfo) {
-                    Log.e(TAG, "onNext: name: " + songInfo.getName() );
+                public void onNext(List<SongInfo> songInfos) {
+                    Log.e(TAG, "onNext: size: " + songInfos.size() );
+                    songList.addAll(songInfos);
                 }
             }, new MyObserver.MyObserverCompleteListener() {
                 @Override
                 public void onComplete() {
-
+                    KKboxDetailPlayListFragment kkboxDetailPlayListFragment = KKboxDetailPlayListFragment.newInstance(songList);
+                    FragmentManager manager = getFragmentManager();
+                    FragmentTransaction transaction = manager.beginTransaction();
+                    transaction.addToBackStack(null);
+                    transaction.replace(R.id.container, kkboxDetailPlayListFragment);
+                    transaction.commit();
                 }
             }));
 
@@ -96,16 +104,16 @@ public class KKboxPlayListFragment extends Fragment {
             mData = (List<PlayListInfo>)getArguments().getSerializable(ARG_LIST);
         }
 
-        mList = view.findViewById(R.id.list);
+        mPlayListRecyclerView = view.findViewById(R.id.list);
 
         initView();
     }
 
     private void initView() {
-        mList.setAdapter(new KKboxPlayListAdapter(mData, mPlayListClickedListener));
+        mPlayListRecyclerView.setAdapter(new KKboxPlayListAdapter(mData, mPlayListClickedListener));
         // 需要設定 layoutManager
-        mList.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mPlayListRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         // 使用 Support Library 內建給 RecyclerView 的項目間隔線
-        mList.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL));
+        mPlayListRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL));
     }
 }

@@ -9,4 +9,12 @@ import java.util.List;
 public class ArtistInfo {
     private String name;
     private List<ImageInfo> images;
+
+    public String getName() {
+        return name;
+    }
+
+    public List<ImageInfo> getImages() {
+        return images;
+    }
 }
