@@ -1,6 +1,7 @@
 package com.kj.kevin.hitsmusic.fragment;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -12,15 +13,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.kj.kevin.hitsmusic.KKboxService;
 import com.kj.kevin.hitsmusic.R;
+import com.kj.kevin.hitsmusic.activity.YoutubePlayerActivity;
 import com.kj.kevin.hitsmusic.adapter.KKboxDetailPlayListAdapter;
-import com.kj.kevin.hitsmusic.model.PlayListInfo;
 import com.kj.kevin.hitsmusic.model.SongInfo;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,6 +28,19 @@ public class KKboxDetailPlayListFragment extends Fragment {
 
     private List<SongInfo> mSongList;
     private RecyclerView mDetailRecycleView;
+    private OnSongClickedListener mOnSongClickedListener = new OnSongClickedListener() {
+        @Override
+        public void onSongClicked(int position) {
+            Log.e(TAG, "onSongClicked: position: " + position );
+
+            Intent intent = new Intent(getActivity(), YoutubePlayerActivity.class);
+            startActivity(intent);
+        }
+    };
+
+    public interface OnSongClickedListener {
+        void onSongClicked(int position);
+    }
 
     public KKboxDetailPlayListFragment() {
         // Required empty public constructor
@@ -69,7 +79,7 @@ public class KKboxDetailPlayListFragment extends Fragment {
     }
 
     private void initView() {
-        mDetailRecycleView.setAdapter(new KKboxDetailPlayListAdapter(mSongList));
+        mDetailRecycleView.setAdapter(new KKboxDetailPlayListAdapter(mSongList, mOnSongClickedListener));
         mDetailRecycleView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mDetailRecycleView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL));
     }

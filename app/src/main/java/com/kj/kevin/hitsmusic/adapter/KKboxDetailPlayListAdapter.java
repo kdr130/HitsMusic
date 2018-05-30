@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.kj.kevin.hitsmusic.R;
+import com.kj.kevin.hitsmusic.fragment.KKboxDetailPlayListFragment;
 import com.kj.kevin.hitsmusic.model.ImageInfo;
 import com.kj.kevin.hitsmusic.model.SongInfo;
 
@@ -21,9 +22,11 @@ import java.util.List;
 public class KKboxDetailPlayListAdapter extends RecyclerView.Adapter<KKboxDetailPlayListAdapter.ViewHolder> {
 
     private List<SongInfo> mSongList;
+    private KKboxDetailPlayListFragment.OnSongClickedListener mListener;
 
-    public KKboxDetailPlayListAdapter(List<SongInfo> data) {
+    public KKboxDetailPlayListAdapter(List<SongInfo> data, KKboxDetailPlayListFragment.OnSongClickedListener listener) {
         mSongList = data;
+        mListener = listener;
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
@@ -31,7 +34,7 @@ public class KKboxDetailPlayListAdapter extends RecyclerView.Adapter<KKboxDetail
         private TextView name;
         private ImageView img;
 
-        public ViewHolder(View itemView) {
+        ViewHolder(View itemView) {
             super(itemView);
 
             img = itemView.findViewById(R.id.img);
@@ -47,7 +50,7 @@ public class KKboxDetailPlayListAdapter extends RecyclerView.Adapter<KKboxDetail
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, final int position) {
         SongInfo songInfo = mSongList.get(position);
 
         if (songInfo == null) {
@@ -66,6 +69,13 @@ public class KKboxDetailPlayListAdapter extends RecyclerView.Adapter<KKboxDetail
 
         holder.name.setText(songInfo.getName());
         holder.artist.setText(songInfo.getAlbum().getArtist().getName());
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mListener.onSongClicked(position);
+            }
+        });
     }
 
     @Override

@@ -13,13 +13,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.MainActivity">
-
-        </activity>
-
-        <service
-            android:name=".KKboxService"
-            android:enabled="true"></service>
 
         <activity android:name=".activity.KKboxActivity">
             <intent-filter>
@@ -28,6 +21,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".activity.YoutubePlayerActivity"></activity>
     </application>
 
 </manifest>

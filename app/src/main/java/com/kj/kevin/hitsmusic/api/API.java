@@ -25,7 +25,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class API {
     public static final String TAG = "API";
     private static final String ACCESS_TOKEN_BASE_URL = "https://account.kkbox.com/";
-    //    private static final String KKBOX_BASE_URL = "https://api.kkbox.com/";
     private static final String KKBOX_BASE_URL = "https://api.kkbox.com/v1.1/";
 
     private static final String KKBOX_CLIENT_ID = "5de9d6f49e555545b4847b4d14687ed2";
