@@ -51,7 +51,7 @@ public class PlayListInfo implements Parcelable {
         description = in.readString();
 
         images = new ArrayList<>();
-        in.readList(images, null);
+        in.readList(images, ImageInfo.class.getClassLoader());
 
         url = in.readString();
     }
