@@ -7,6 +7,7 @@ import com.google.gson.reflect.TypeToken;
 import com.kj.kevin.hitsmusic.api.API;
 import com.kj.kevin.hitsmusic.model.PlayListInfo;
 import com.kj.kevin.hitsmusic.model.SongInfo;
+import com.kj.kevin.hitsmusic.model.YoutubeSearchResult;
 
 import java.lang.reflect.Type;
 import java.util.List;
@@ -87,5 +88,9 @@ public class ApiMethods {
                         return Observable.just(songInfos);
                     }
                 }), observer);
+    }
+
+    public static void getYoutubeSearchResult(String developerKey, String searchKeyword, MyObserver<YoutubeSearchResult> observer) {
+        ApiSubscribe(API.getYoutubeService().getSearchResult(developerKey, "snippet", "video", searchKeyword, 10), observer);
     }
 }

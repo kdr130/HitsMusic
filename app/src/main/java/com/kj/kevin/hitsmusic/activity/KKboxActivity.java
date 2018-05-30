@@ -36,7 +36,6 @@ public class KKboxActivity extends AppCompatActivity {
 
                 Log.e(TAG, "onNext: KKboxAccessToken: " + KKboxAccessToken);
                 API.setAccessToken(KKboxAccessToken);
-                API.setKKboxService();
 
                 ApiMethods.getNewHitsPlaylist(new MyObserver<PlayListInfo>("getNewHitsPlaylist", new MyObserver.MyObserverNextListener<PlayListInfo>() {
                     @Override

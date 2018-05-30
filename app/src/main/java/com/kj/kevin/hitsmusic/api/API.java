@@ -26,6 +26,7 @@ public class API {
     public static final String TAG = "API";
     private static final String ACCESS_TOKEN_BASE_URL = "https://account.kkbox.com/";
     private static final String KKBOX_BASE_URL = "https://api.kkbox.com/v1.1/";
+    private static final String YOUTUBE_BASE_URL = "https://www.googleapis.com/youtube/v3/";
 
     private static final String KKBOX_CLIENT_ID = "5de9d6f49e555545b4847b4d14687ed2";
     private static final String KKBOX_CLIENT_SECRET= "e5b071b58ba0c1764de0244077996755";
@@ -34,6 +35,7 @@ public class API {
 
     private static AccessTokenAPI accessTokenService;
     private static KKboxAPI kkboxService;
+    private static YoutubeAPI youtubeService;
 
     public static AccessTokenAPI getAccessTokenService() {
         if (accessTokenService == null) {
@@ -127,7 +129,35 @@ public class API {
     }
 
     public static KKboxAPI getKKboxService() {
+        if (kkboxService == null) {
+            setKKboxService();
+        }
         return kkboxService;
+    }
+
+    public static void setYoutubeSerivce() {
+        Gson gson = new GsonBuilder()
+                .setLenient()
+                .create();
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(YOUTUBE_BASE_URL)
+                // 將 response 使用 Gson 格式處理
+                // 需要在 build.gradle 加入 compile 'com.squareup.retrofit2:converter-gson:2.3.0'
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                // 搭配 RxJava2.0 則要加入 RxJava2CallAdapterFactory.create()
+                // 需要在 build.gradle 加入 compile 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                // 使用 OkHttpClient 來設定 Header
+                .build();
+        youtubeService = retrofit.create(YoutubeAPI.class);
+    }
+
+    public static YoutubeAPI getYoutubeService() {
+        if ( youtubeService == null ) {
+            setYoutubeSerivce();
+        }
+        return youtubeService;
     }
 
 }

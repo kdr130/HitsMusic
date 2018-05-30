@@ -24,6 +24,7 @@ import java.util.List;
 
 public class KKboxDetailPlayListFragment extends Fragment {
     public static final String TAG = "KKboxDetailPlayList";
+    public static final String SONG_DATA = "song_data";
     private static final String ARG_LIST = "list";
 
     private List<SongInfo> mSongList;
@@ -34,6 +35,7 @@ public class KKboxDetailPlayListFragment extends Fragment {
             Log.e(TAG, "onSongClicked: position: " + position );
 
             Intent intent = new Intent(getActivity(), YoutubePlayerActivity.class);
+            intent.putExtra(SONG_DATA, mSongList.get(position));
             startActivity(intent);
         }
     };
