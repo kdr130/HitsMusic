@@ -15,6 +15,9 @@ import com.kj.kevin.hitsmusic.R;
 import com.kj.kevin.hitsmusic.model.SongInfo;
 import com.kj.kevin.hitsmusic.model.YoutubeSearchResult;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static com.kj.kevin.hitsmusic.fragment.KKboxDetailPlayListFragment.SONG_BUNDLE;
 import static com.kj.kevin.hitsmusic.fragment.KKboxDetailPlayListFragment.SONG_DATA;
 
@@ -28,7 +31,8 @@ public class YoutubePlayerActivity extends YouTubeBaseActivity implements YouTub
     private static final String YOUTUBE_API_KEY = "AIzaSyB91k7jLqrzqHOKVxcsbPvTor6aTW1OX2w";
 
     private SongInfo mSongData;
-    private String mSearchedVideoId;
+    private List<String> mSearchedVideoIdList = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,8 +60,11 @@ public class YoutubePlayerActivity extends YouTubeBaseActivity implements YouTub
             public void onNext(YoutubeSearchResult result) {
                 Log.e(TAG, "onNext: " + result.getItems().get(0).getSnippet().toString() );
 
+                List<YoutubeSearchResult.YoutubeItem> searchedResult = result.getItems();
 
-                mSearchedVideoId = result.getItems().get(0).getId().getVideoId();
+                for (int i = 0; i < 5 && i < searchedResult.size(); i++) {
+                    mSearchedVideoIdList.add(searchedResult.get(i).getId().getVideoId());
+                }
             }
         }, new MyObserver.MyObserverCompleteListener() {
             @Override
@@ -66,24 +73,26 @@ public class YoutubePlayerActivity extends YouTubeBaseActivity implements YouTub
                 youTubeView.initialize(YOUTUBE_API_KEY, YoutubePlayerActivity.this);
             }
         }));
-
-
     }
 
     @Override
-    public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean b) {
+    public void onInitializationSuccess(YouTubePlayer.Provider provider, final YouTubePlayer youTubePlayer, boolean b) {
         if (!b) {
-            Log.e(TAG, "onInitializationSuccess: mSearchedVideoId: " + mSearchedVideoId );
-            youTubePlayer.cueVideo(mSearchedVideoId);
+            final int[] playIndex = new int[1];
+            playIndex[0] = 0;
+
+            youTubePlayer.cueVideos(mSearchedVideoIdList);
+
             youTubePlayer.setPlayerStateChangeListener(new YouTubePlayer.PlayerStateChangeListener() {
                 @Override
                 public void onLoading() {
-
+                    Log.e(TAG, "onLoading: ");
+                    // avoid youtube player auto play video when onError is been triggered
+                    youTubePlayer.pause();
                 }
 
                 @Override
                 public void onLoaded(String s) {
-
                 }
 
                 @Override
@@ -104,6 +113,13 @@ public class YoutubePlayerActivity extends YouTubeBaseActivity implements YouTub
                 @Override
                 public void onError(YouTubePlayer.ErrorReason errorReason) {
                     Log.e(TAG, "onError: errorReason: " + errorReason.toString() );
+                    mSearchedVideoIdList.remove(0);
+                    playIndex[0]++;
+                    if (playIndex[0] < mSearchedVideoIdList.size()) {
+                        youTubePlayer.cueVideos(mSearchedVideoIdList);
+
+                    }
+
                 }
             });
         }
