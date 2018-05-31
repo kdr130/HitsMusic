@@ -42,6 +42,7 @@ public class KKboxPlayListFragment extends Fragment {
                 @Override
                 public void onNext(List<SongInfo> songInfos) {
                     Log.e(TAG, "onNext: size: " + songInfos.size() );
+                    Log.e(TAG, "onNext: songInfos: " + songInfos.toString() );
                     songList.addAll(songInfos);
                 }
             }, new MyObserver.MyObserverCompleteListener() {

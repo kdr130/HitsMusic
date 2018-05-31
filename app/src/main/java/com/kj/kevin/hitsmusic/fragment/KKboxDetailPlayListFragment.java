@@ -25,6 +25,7 @@ import java.util.List;
 public class KKboxDetailPlayListFragment extends Fragment {
     public static final String TAG = "KKboxDetailPlayList";
     public static final String SONG_DATA = "song_data";
+    public static final String SONG_BUNDLE = "song_bundle";
     private static final String ARG_LIST = "list";
 
     private List<SongInfo> mSongList;
@@ -32,10 +33,13 @@ public class KKboxDetailPlayListFragment extends Fragment {
     private OnSongClickedListener mOnSongClickedListener = new OnSongClickedListener() {
         @Override
         public void onSongClicked(int position) {
-            Log.e(TAG, "onSongClicked: position: " + position );
+            Log.e(TAG, "onSongClicked: data: " + mSongList.get(position) );
 
             Intent intent = new Intent(getActivity(), YoutubePlayerActivity.class);
-            intent.putExtra(SONG_DATA, mSongList.get(position));
+            Bundle bundle = new Bundle();
+
+            bundle.putParcelable(SONG_DATA, mSongList.get(position));
+            intent.putExtra(SONG_BUNDLE, bundle);
             startActivity(intent);
         }
     };

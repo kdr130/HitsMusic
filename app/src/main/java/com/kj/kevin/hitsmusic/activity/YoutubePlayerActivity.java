@@ -15,6 +15,7 @@ import com.kj.kevin.hitsmusic.R;
 import com.kj.kevin.hitsmusic.model.SongInfo;
 import com.kj.kevin.hitsmusic.model.YoutubeSearchResult;
 
+import static com.kj.kevin.hitsmusic.fragment.KKboxDetailPlayListFragment.SONG_BUNDLE;
 import static com.kj.kevin.hitsmusic.fragment.KKboxDetailPlayListFragment.SONG_DATA;
 
 public class YoutubePlayerActivity extends YouTubeBaseActivity implements YouTubePlayer.OnInitializedListener {
@@ -34,16 +35,27 @@ public class YoutubePlayerActivity extends YouTubeBaseActivity implements YouTub
         setContentView(R.layout.activity_youtube_player);
 
         Intent input = getIntent();
-        if (input.getParcelableExtra(SONG_DATA) != null) {
-            mSongData = input.getParcelableExtra(SONG_DATA);
+
+
+        if (input.getBundleExtra(SONG_BUNDLE).getParcelable(SONG_DATA) != null) {
+            mSongData = input.getBundleExtra(SONG_BUNDLE).getParcelable(SONG_DATA);
         }
 
-        String nameOfSong = mSongData.getName();
+        Log.e(TAG, "onCreate: mSongData: " + mSongData.toString() );
 
-        ApiMethods.getYoutubeSearchResult(YOUTUBE_API_KEY, nameOfSong, new MyObserver<YoutubeSearchResult>("getYoutubeSearchResult", new MyObserver.MyObserverNextListener<YoutubeSearchResult>() {
+        String searchKeyword1 = mSongData.getName();
+
+        String searchKeyword2 = mSongData.getAlbum().getArtist().getName();
+
+        String searchKeyword = searchKeyword1 + " " + searchKeyword2;
+
+        Log.e(TAG, "onCreate: searchKeyword: " + searchKeyword );
+        
+        ApiMethods.getYoutubeSearchResult(YOUTUBE_API_KEY, searchKeyword, new MyObserver<YoutubeSearchResult>("getYoutubeSearchResult", new MyObserver.MyObserverNextListener<YoutubeSearchResult>() {
             @Override
             public void onNext(YoutubeSearchResult result) {
-                Log.e(TAG, "onNext: " + result.getItems().get(0).getId() );
+                Log.e(TAG, "onNext: " + result.getItems().get(0).getSnippet().toString() );
+
 
                 mSearchedVideoId = result.getItems().get(0).getId().getVideoId();
             }
@@ -63,6 +75,37 @@ public class YoutubePlayerActivity extends YouTubeBaseActivity implements YouTub
         if (!b) {
             Log.e(TAG, "onInitializationSuccess: mSearchedVideoId: " + mSearchedVideoId );
             youTubePlayer.cueVideo(mSearchedVideoId);
+            youTubePlayer.setPlayerStateChangeListener(new YouTubePlayer.PlayerStateChangeListener() {
+                @Override
+                public void onLoading() {
+
+                }
+
+                @Override
+                public void onLoaded(String s) {
+
+                }
+
+                @Override
+                public void onAdStarted() {
+
+                }
+
+                @Override
+                public void onVideoStarted() {
+
+                }
+
+                @Override
+                public void onVideoEnded() {
+
+                }
+
+                @Override
+                public void onError(YouTubePlayer.ErrorReason errorReason) {
+                    Log.e(TAG, "onError: errorReason: " + errorReason.toString() );
+                }
+            });
         }
     }
 

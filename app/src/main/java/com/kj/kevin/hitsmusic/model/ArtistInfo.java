@@ -3,6 +3,9 @@ package com.kj.kevin.hitsmusic.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.Gson;
+
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -15,7 +18,8 @@ public class ArtistInfo implements Parcelable {
 
     protected ArtistInfo(Parcel in) {
         name = in.readString();
-        images = in.createTypedArrayList(ImageInfo.CREATOR);
+        images = new ArrayList<>();
+        in.readList(images, ImageInfo.class.getClassLoader());
     }
 
     public static final Creator<ArtistInfo> CREATOR = new Creator<ArtistInfo>() {
@@ -47,5 +51,11 @@ public class ArtistInfo implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(name);
         dest.writeList(images);
+    }
+
+    @Override
+    public String toString() {
+        Gson gson = new Gson();
+        return gson.toJson(this);
     }
 }

@@ -33,6 +33,12 @@ public class YoutubeSearchResult {
         public String getDescription() {
             return description;
         }
+
+        @Override
+        public String toString() {
+            Gson gson = new Gson();
+            return gson.toJson(this);
+        }
     }
 
     public class YoutubeItem {
@@ -45,6 +51,12 @@ public class YoutubeSearchResult {
 
         public YoutubeItemSnippet getSnippet() {
             return snippet;
+        }
+
+        @Override
+        public String toString() {
+            Gson gson = new Gson();
+            return gson.toJson(this);
         }
     }
 
