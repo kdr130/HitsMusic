@@ -2,9 +2,13 @@
     <string name="app_name">HitsMusic</string>
     <string name="KKBOX_CLIENT_ID">5de9d6f49e555545b4847b4d14687ed2</string>
     <string name="KKBOX_CLIENT_SECRET">e5b071b58ba0c1764de0244077996755</string>
+    <string name="YOUTUBE_API_KEY">AIzaSyB91k7jLqrzqHOKVxcsbPvTor6aTW1OX2w</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="chart">歌曲排行榜</string>
     <string name="new_hits_playlist">最新主題歌單</string>
+    <string name="youtube_search_no_result">目前 Youtube 沒有該歌曲的相關影片，請點擊別首歌曲</string>
+    <string name="init_youtuberplayer_error">初始化 YouTubePlayer 發生錯誤：(%1$s)</string>
+
 </resources>

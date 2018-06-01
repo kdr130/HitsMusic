@@ -1,6 +1,7 @@
 package com.kj.kevin.hitsmusic.model;
 
 import com.google.gson.Gson;
+import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
@@ -22,9 +23,47 @@ public class YoutubeSearchResult {
         }
     }
 
+    public class YoutubeThumbnail {
+        private String url;
+        private int width;
+        private int height;
+
+        public String getUrl() {
+            return url;
+        }
+
+        public int getWidth() {
+            return width;
+        }
+
+        public int getHeight() {
+            return height;
+        }
+    }
+
+    public class YoutubeThumbnails {
+        @SerializedName("default")
+        private YoutubeThumbnail defaultThumbnail;
+        private YoutubeThumbnail medium;
+        private YoutubeThumbnail high;
+
+        public YoutubeThumbnail getDefaultThumbnail() {
+            return defaultThumbnail;
+        }
+
+        public YoutubeThumbnail getMedium() {
+            return medium;
+        }
+
+        public YoutubeThumbnail getHigh() {
+            return high;
+        }
+    }
+
     public class YoutubeItemSnippet {
         private String title;
         private String description;
+        private YoutubeThumbnails thumbnails;
 
         public String getTitle() {
             return title;
@@ -32,6 +71,10 @@ public class YoutubeSearchResult {
 
         public String getDescription() {
             return description;
+        }
+
+        public YoutubeThumbnails getThumbnails() {
+            return thumbnails;
         }
 
         @Override
@@ -44,6 +87,15 @@ public class YoutubeSearchResult {
     public class YoutubeItem {
         private YoutubeItemId id;
         private YoutubeItemSnippet snippet;
+        private boolean isPlaying = false;
+
+        public boolean isPlaying() {
+            return isPlaying;
+        }
+
+        public void setPlaying(boolean playing) {
+            isPlaying = playing;
+        }
 
         public YoutubeItemId getId() {
             return id;
