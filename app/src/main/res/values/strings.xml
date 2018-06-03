@@ -6,7 +6,7 @@
 
     <!-- Playlist category -->
     <string name="chart">歌曲排行榜</string>
-    <string name="new_hits_playlist">最新主題歌單</string>
+    <string name="new_hits">最新主題歌單</string>
 
     <!-- Youtube -->
     <string name="youtube_search_no_result">目前 Youtube 沒有該歌曲的相關影片，請點擊別首歌曲</string>

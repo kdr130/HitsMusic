@@ -22,8 +22,8 @@ import com.kj.kevin.hitsmusic.model.YoutubeSearchResult;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.kj.kevin.hitsmusic.fragment.KKboxDetailPlayListFragment.SONG_BUNDLE;
-import static com.kj.kevin.hitsmusic.fragment.KKboxDetailPlayListFragment.SONG_DATA;
+import static com.kj.kevin.hitsmusic.fragment.KKboxDetailPlayListFragmentKKbox.SONG_BUNDLE;
+import static com.kj.kevin.hitsmusic.fragment.KKboxDetailPlayListFragmentKKbox.SONG_DATA;
 
 public class YoutubePlayerActivity extends YouTubeBaseActivity implements YouTubePlayer.OnInitializedListener {
     private static final String TAG = "YoutubePlayerActivity";
@@ -118,7 +118,9 @@ public class YoutubePlayerActivity extends YouTubeBaseActivity implements YouTub
         YouTubePlayerView youTubeView = findViewById(R.id.youtube_player);
         youTubeView.initialize(YOUTUBE_API_KEY, YoutubePlayerActivity.this);
 
-        mSearchedResult.get(mPlayingIndex).setPlaying(true);
+        if (mSearchedResult.size() != 0) {
+            mSearchedResult.get(mPlayingIndex).setPlaying(true);
+        }
     }
 
     private void initVIew() {
