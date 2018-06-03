@@ -75,6 +75,9 @@ public class KKboxDetailPlayListFragmentKKbox extends KKboxBaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         Log.e(TAG, "onCreateView: ");
+
+        showLoadingProgressBar();
+
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_kkbox_detail_playlist, container, false);
     }
@@ -85,13 +88,6 @@ public class KKboxDetailPlayListFragmentKKbox extends KKboxBaseFragment {
         Log.e(TAG, "onViewCreated: ");
 
         mDetailRecycleView = view.findViewById(R.id.detail_list);
-
-        if (mSongList == null) {
-            getData();
-        } else {
-            initView();
-        }
-
     }
 
     @Override
@@ -100,7 +96,12 @@ public class KKboxDetailPlayListFragmentKKbox extends KKboxBaseFragment {
         Log.e(TAG, "onResume: ");
     }
 
-    private void getData() {
+    public void getData() {
+        if (mSongList != null) {
+            initView();
+            return;
+        }
+
         if (mPlaylistId == null) {
             Log.e(TAG, "getData: mPlaylistId == null");
             return;

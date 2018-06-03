@@ -35,8 +35,6 @@ public class KKboxPlayListFragmentKKbox extends KKboxBaseFragment {
         public void onPlayListClicked(int position) {
             Log.e(TAG, "onPlayListClicked: position: " + position + ", id: " + mData.get(position).getId() );
 
-            showLoadingProgressBar();
-
             KKboxDetailPlayListFragmentKKbox kkboxDetailPlayListFragment = KKboxDetailPlayListFragmentKKbox.newInstance(mData.get(position).getId());
             FragmentManager manager = getFragmentManager();
             FragmentTransaction transaction = manager.beginTransaction();
@@ -72,7 +70,6 @@ public class KKboxPlayListFragmentKKbox extends KKboxBaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         Log.e(TAG, "onCreate: ");
     }
 
@@ -88,21 +85,24 @@ public class KKboxPlayListFragmentKKbox extends KKboxBaseFragment {
         super.onViewCreated(view, savedInstanceState);
         Log.e(TAG, "onViewCreated: ");
 
+        showLoadingProgressBar();
+
         if ( getArguments().getSerializable(ARG_CATEGORY_RESID) instanceof Integer ) {
             mCategoryResId = getArguments().getInt(ARG_CATEGORY_RESID);
         }
 
         mPlayListRecyclerView = view.findViewById(R.id.list);
-
-        if (mData == null) {
-            getData();
-        } else {
-            initView();
-        }
-
     }
 
-    private void getData() {
+    public void getData() {
+        Log.e(TAG, "getData: ");
+
+        if (mData != null) {
+            initView();
+
+            return;
+        }
+
         mData = new ArrayList<>();
 
         switch (mCategoryResId) {

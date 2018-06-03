@@ -13,10 +13,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.gson.JsonObject;
 import com.kj.kevin.hitsmusic.ApiMethods;
 import com.kj.kevin.hitsmusic.MyObserver;
 import com.kj.kevin.hitsmusic.R;
 import com.kj.kevin.hitsmusic.adapter.KKboxPlayListCategoryAdapter;
+import com.kj.kevin.hitsmusic.api.API;
 import com.kj.kevin.hitsmusic.model.PlayListInfo;
 
 import java.util.ArrayList;
@@ -40,8 +42,6 @@ public class KKboxPlayListCategoryFragmentKKbox extends KKboxBaseFragment {
         @Override
         public void onCategoryClicked(int position) {
             Log.e(TAG, "onCategoryClicked: position: " + position);
-
-            showLoadingProgressBar();
 
             KKboxPlayListFragmentKKbox kKboxPlayListFragment = KKboxPlayListFragmentKKbox.newInstance(PLAYLIST_CATEGORY[position]);
 
@@ -78,6 +78,9 @@ public class KKboxPlayListCategoryFragmentKKbox extends KKboxBaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        showLoadingProgressBar();
+
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_kkbox_play_list_category, container, false);
     }
@@ -95,10 +98,26 @@ public class KKboxPlayListCategoryFragmentKKbox extends KKboxBaseFragment {
             mCategoryResIdList.add(R.string.chart);
             mCategoryResIdList.add(R.string.new_hits);
         }
-
-        initView();
     }
 
+    @Override
+    public void getData() {
+
+        ApiMethods.getAccessToken(new MyObserver<JsonObject>("getAccessToken", new MyObserver.MyObserverNextListener<JsonObject>() {
+            @Override
+            public void onNext(JsonObject jsonObject) {
+                String KKboxAccessToken = jsonObject.get("access_token").getAsString();
+
+                Log.e(TAG, "onNext: KKboxAccessToken: " + KKboxAccessToken);
+                API.setAccessToken(KKboxAccessToken);
+            }
+        }, new MyObserver.MyObserverCompleteListener() {
+            @Override
+            public void onComplete() {
+                initView();
+            }
+        }));
+    }
 
     private void initView() {
         if (!isAdded()) {
