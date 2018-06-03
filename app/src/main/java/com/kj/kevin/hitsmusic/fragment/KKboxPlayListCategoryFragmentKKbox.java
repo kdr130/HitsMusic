@@ -93,15 +93,17 @@ public class KKboxPlayListCategoryFragmentKKbox extends KKboxBaseFragment {
 
         mCategoryRecycleView = view.findViewById(R.id.category_list);
 
-        if (mCategoryResIdList == null) {
-            mCategoryResIdList = new ArrayList<>();
-            mCategoryResIdList.add(R.string.chart);
-            mCategoryResIdList.add(R.string.new_hits);
+
+        if (mCategoryResIdList != null) {
+            initView();
         }
     }
 
     @Override
     public void getData() {
+        if (mCategoryResIdList != null) {
+            return;
+        }
 
         ApiMethods.getAccessToken(new MyObserver<JsonObject>("getAccessToken", new MyObserver.MyObserverNextListener<JsonObject>() {
             @Override
@@ -110,6 +112,11 @@ public class KKboxPlayListCategoryFragmentKKbox extends KKboxBaseFragment {
 
                 Log.e(TAG, "onNext: KKboxAccessToken: " + KKboxAccessToken);
                 API.setAccessToken(KKboxAccessToken);
+                if (mCategoryResIdList == null) {
+                    mCategoryResIdList = new ArrayList<>();
+                    mCategoryResIdList.add(R.string.chart);
+                    mCategoryResIdList.add(R.string.new_hits);
+                }
             }
         }, new MyObserver.MyObserverCompleteListener() {
             @Override

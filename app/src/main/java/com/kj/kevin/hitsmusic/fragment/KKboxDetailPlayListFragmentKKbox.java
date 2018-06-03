@@ -88,6 +88,10 @@ public class KKboxDetailPlayListFragmentKKbox extends KKboxBaseFragment {
         Log.e(TAG, "onViewCreated: ");
 
         mDetailRecycleView = view.findViewById(R.id.detail_list);
+
+        if (mSongList != null) {
+            initView();
+        }
     }
 
     @Override
@@ -98,7 +102,6 @@ public class KKboxDetailPlayListFragmentKKbox extends KKboxBaseFragment {
 
     public void getData() {
         if (mSongList != null) {
-            initView();
             return;
         }
 

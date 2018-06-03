@@ -92,14 +92,15 @@ public class KKboxPlayListFragmentKKbox extends KKboxBaseFragment {
         }
 
         mPlayListRecyclerView = view.findViewById(R.id.list);
+        if (mData != null) {
+            initView();
+        }
     }
 
     public void getData() {
         Log.e(TAG, "getData: ");
 
         if (mData != null) {
-            initView();
-
             return;
         }
 
