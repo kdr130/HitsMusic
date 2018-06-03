@@ -1,5 +1,10 @@
 package com.kj.kevin.hitsmusic.activity;
 
+import android.app.job.JobInfo;
+import android.app.job.JobScheduler;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -8,6 +13,8 @@ import android.util.Log;
 
 import com.google.gson.JsonObject;
 import com.kj.kevin.hitsmusic.ApiMethods;
+import com.kj.kevin.hitsmusic.HitsMusic;
+import com.kj.kevin.hitsmusic.JobSchedulerService;
 import com.kj.kevin.hitsmusic.MyObserver;
 import com.kj.kevin.hitsmusic.R;
 import com.kj.kevin.hitsmusic.api.API;
@@ -23,6 +30,7 @@ public class KKboxActivity extends AppCompatActivity {
 
     private List<PlayListInfo> mNewHitsPlaylist = new ArrayList<>();
     private List<PlayListInfo> mChartPlaylist = new ArrayList<>();
+    private int mJobId = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,8 +78,47 @@ public class KKboxActivity extends AppCompatActivity {
 
                     }
                 }));
-
             }
         }));
+
+        scheduleJob();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        Intent startJobServiceIntent = new Intent(this, JobSchedulerService.class);
+        startService(startJobServiceIntent);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (HitsMusic.isMobileNetworkAvailable(this)) {
+            Log.e(TAG, "onResume: Mobile Network Is Available" );
+        } else {
+            Log.e(TAG, "onResume: Mobile Network Is Not Available" );
+            HitsMusic.showNetworkNotAvailableDialog(this);
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        stopService(new Intent(this, JobSchedulerService.class));
+
+        super.onStop();
+    }
+
+    private void scheduleJob() {
+        JobInfo.Builder builder = new JobInfo.Builder(mJobId++, new ComponentName(this, JobSchedulerService.class));
+        // 有網路就好，不管什麼是 wifi 或是 3G 4G
+        builder.setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY);
+        builder.setPersisted(true);
+
+        Log.e(TAG, "Scheduling job");
+        JobScheduler jobScheduler = (JobScheduler) getSystemService(Context.JOB_SCHEDULER_SERVICE);
+        jobScheduler.schedule(builder.build());
     }
 }
