@@ -77,9 +77,15 @@ public class YoutubePlayerActivity extends YouTubeBaseActivity implements YouTub
         if (songData != null) {
             Log.e(TAG, "onCreate: mSongData: " + songData.toString() );
 
-            String searchKeyword1 = songData.getName();
-            String searchKeyword2 = songData.getAlbum().getArtist().getName();
-            String searchKeyword = searchKeyword1 + " " + searchKeyword2;
+            String songName = songData.getName();
+            // remove (English Song Name) to improve search result
+            int leftPara = songName.indexOf(" (");
+            if (leftPara > 0) {
+                songName = songName.substring(0, leftPara);
+            }
+
+            String artistName = songData.getAlbum().getArtist().getName();
+            String searchKeyword = songName + " " + artistName;
 
             searchYoutube(searchKeyword);
         }
