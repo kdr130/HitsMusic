@@ -182,7 +182,7 @@ public class YoutubePlayerActivity extends YouTubeBaseActivity implements YouTub
         if (errorReason.isUserRecoverableError()) {
             Log.e(TAG, "onInitializationFailure: errorReason.isUserRecoverableError() == true");
         } else {
-            String errorMessage = String.format(getString(R.string.init_youtuberplayer_error), errorReason.toString());
+            String errorMessage = String.format(getString(R.string.init_youtubeplayer_error), errorReason.toString());
             Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show();
         }
     }

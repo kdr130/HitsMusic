@@ -1,13 +1,11 @@
 package com.kj.kevin.hitsmusic.fragment;
 
 import android.content.Intent;
-import android.os.Handler;
 import android.os.Messenger;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.kj.kevin.hitsmusic.BuildConfig;
 import com.kj.kevin.hitsmusic.HitsMusic;
 import com.kj.kevin.hitsmusic.JobSchedulerService;
 import com.kj.kevin.hitsmusic.activity.KKboxActivity;
@@ -67,5 +65,10 @@ public class KKboxBaseFragment extends Fragment {
         getActivity().stopService(new Intent(getActivity(), JobSchedulerService.class));
         super.onStop();
         Log.e(TAG, "onStop: ");
+    }
+
+    public void setActionBarTitle(String title) {
+        Log.e(TAG, "setActionBarTitle: title: " + title );
+        ((KKboxActivity)getActivity()).setActionBarTitle(title);
     }
 }

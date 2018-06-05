@@ -7,11 +7,16 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 
@@ -34,6 +39,8 @@ public class KKboxActivity extends AppCompatActivity {
     private ProgressBar mProgressBar;
     private int mJobId = 0;
 
+    private DrawerLayout mDrawerLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +52,38 @@ public class KKboxActivity extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        ActionBar actionbar = getSupportActionBar();
+        actionbar.setDisplayHomeAsUpEnabled(true);
+        actionbar.setHomeAsUpIndicator(R.drawable.ic_menu);
+
+        mDrawerLayout = findViewById(R.id.drawer_layout);
+
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(
+                new NavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(MenuItem menuItem) {
+                        menuItem.setChecked(true);
+                        // 這邊可以用   menuItem.getItemId() 去判斷是按下哪個選項
+                        // 再做對應的動作，像是切換 Fragment 之類的
+                        mDrawerLayout.closeDrawers();
+
+                        return true;
+                    }
+                });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Log.e(TAG, "onOptionsItemSelected: " );
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                mDrawerLayout.openDrawer(GravityCompat.START);
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     private void initJobHandler() {
@@ -101,6 +140,14 @@ public class KKboxActivity extends AppCompatActivity {
                     fragment.getData();
                 }
             }
+        }
+    }
+
+    public void setActionBarTitle(String title) {
+        ActionBar actionbar = getSupportActionBar();
+        if (actionbar!=null) {
+            Log.d(TAG, "setActionBarTitle: title: " + title);
+            actionbar.setTitle(title);
         }
     }
 }

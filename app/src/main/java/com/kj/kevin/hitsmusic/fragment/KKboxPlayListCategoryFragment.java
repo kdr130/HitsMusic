@@ -90,7 +90,7 @@ public class KKboxPlayListCategoryFragment extends KKboxBaseFragment {
         Log.e(TAG, "onViewCreated: ");
 
         mCategoryRecycleView = view.findViewById(R.id.category_list);
-
+        setActionBarTitle(getString(R.string.kkbox_playlist_category_actionbar_title));
 
         if (mCategoryResIdList != null) {
             initView();

@@ -10,11 +10,17 @@
 
     <!-- Youtube -->
     <string name="youtube_search_no_result">目前 Youtube 沒有該歌曲的相關影片，請點擊別首歌曲</string>
-    <string name="init_youtuberplayer_error">初始化 YouTubePlayer 發生錯誤：(%1$s)</string>
+    <string name="init_youtubeplayer_error">初始化 YouTubePlayer 發生錯誤：(%1$s)</string>
 
     <!-- Network is not available -->
     <string name="network_not_available_title">偵測不到可用網路</string>
     <string name="network_not_available_message">是否前往「設定」頁面開啟網路</string>
+
+    <!-- KKBOX fragment actionbar title -->
+    <string name="kkbox_playlist_category_actionbar_title">歌單種類</string>
+    <string name="kkbox_playlist_actionbar_title">相關歌單</string>
+    <string name="kkbox_detail_playlist_actionbar_title">歌單歌曲</string>
+
 
     <string name="ok">是</string>
 </resources>

@@ -92,6 +92,8 @@ public class KKboxPlayListFragmentKKbox extends KKboxBaseFragment {
         }
 
         mPlayListRecyclerView = view.findViewById(R.id.list);
+        setActionBarTitle(getString(R.string.kkbox_playlist_actionbar_title));
+
         if (mData != null) {
             initView();
         }
@@ -156,6 +158,7 @@ public class KKboxPlayListFragmentKKbox extends KKboxBaseFragment {
         if (!isAdded()) {
             return;
         }
+
         mPlayListRecyclerView.setAdapter(new KKboxPlayListAdapter(mData, mPlayListClickedListener));
         // 需要設定 layoutManager
         mPlayListRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));

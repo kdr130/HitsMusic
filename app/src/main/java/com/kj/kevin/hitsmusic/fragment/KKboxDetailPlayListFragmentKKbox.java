@@ -88,6 +88,7 @@ public class KKboxDetailPlayListFragmentKKbox extends KKboxBaseFragment {
         Log.e(TAG, "onViewCreated: ");
 
         mDetailRecycleView = view.findViewById(R.id.detail_list);
+        setActionBarTitle(getString(R.string.kkbox_detail_playlist_actionbar_title));
 
         if (mSongList != null) {
             initView();
