@@ -19,7 +19,7 @@ import com.kj.kevin.hitsmusic.BuildConfig;
 import com.kj.kevin.hitsmusic.JobSchedulerService;
 import com.kj.kevin.hitsmusic.R;
 import com.kj.kevin.hitsmusic.fragment.KKboxBaseFragment;
-import com.kj.kevin.hitsmusic.fragment.KKboxPlayListCategoryFragmentKKbox;
+import com.kj.kevin.hitsmusic.fragment.KKboxPlayListCategoryFragment;
 
 public class KKboxActivity extends AppCompatActivity {
     public static final String TAG = "KKboxActivity";
@@ -38,14 +38,14 @@ public class KKboxActivity extends AppCompatActivity {
         setContentView(R.layout.activity_kkbox);
 
         mProgressBar = findViewById(R.id.loading_progressbar);
+        initJobHandler();
+        placePlaylistCategoryFragment();
 
-        KKboxPlayListCategoryFragmentKKbox kKboxPlayListCategoryFragment = KKboxPlayListCategoryFragmentKKbox.newInstance();
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+    }
 
-        FragmentManager manager = getSupportFragmentManager();
-        FragmentTransaction transaction = manager.beginTransaction();
-        transaction.add(R.id.container, kKboxPlayListCategoryFragment);
-        transaction.commitAllowingStateLoss();
-
+    private void initJobHandler() {
         mJobHandler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
@@ -59,9 +59,15 @@ public class KKboxActivity extends AppCompatActivity {
                 }
             }
         };
+    }
 
-        Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+    private void placePlaylistCategoryFragment() {
+        KKboxPlayListCategoryFragment kKboxPlayListCategoryFragment = KKboxPlayListCategoryFragment.newInstance();
+
+        FragmentManager manager = getSupportFragmentManager();
+        FragmentTransaction transaction = manager.beginTransaction();
+        transaction.add(R.id.container, kKboxPlayListCategoryFragment);
+        transaction.commitAllowingStateLoss();
     }
 
     public void scheduleJob() {

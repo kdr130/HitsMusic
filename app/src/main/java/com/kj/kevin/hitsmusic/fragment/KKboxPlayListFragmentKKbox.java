@@ -107,10 +107,10 @@ public class KKboxPlayListFragmentKKbox extends KKboxBaseFragment {
         mData = new ArrayList<>();
 
         switch (mCategoryResId) {
-            case KKboxPlayListCategoryFragmentKKbox.PlaylistCategoryResId.CHART:
+            case KKboxPlayListCategoryFragment.PlaylistCategoryResId.CHART:
                 getChartPlaylist();
                 break;
-            case KKboxPlayListCategoryFragmentKKbox.PlaylistCategoryResId.NEW_HITS:
+            case KKboxPlayListCategoryFragment.PlaylistCategoryResId.NEW_HITS:
                 getNewHitsPlaylist();
                 break;
             default:

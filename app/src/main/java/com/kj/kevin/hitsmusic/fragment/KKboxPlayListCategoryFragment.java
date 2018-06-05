@@ -19,13 +19,11 @@ import com.kj.kevin.hitsmusic.MyObserver;
 import com.kj.kevin.hitsmusic.R;
 import com.kj.kevin.hitsmusic.adapter.KKboxPlayListCategoryAdapter;
 import com.kj.kevin.hitsmusic.api.API;
-import com.kj.kevin.hitsmusic.model.PlayListInfo;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
-public class KKboxPlayListCategoryFragmentKKbox extends KKboxBaseFragment {
+public class KKboxPlayListCategoryFragment extends KKboxBaseFragment {
     private static final String TAG = "CategoryFragment";
 
     private List<Integer> mCategoryResIdList;
@@ -58,13 +56,13 @@ public class KKboxPlayListCategoryFragmentKKbox extends KKboxBaseFragment {
         void onCategoryClicked(int position);
     }
 
-    public KKboxPlayListCategoryFragmentKKbox() {
+    public KKboxPlayListCategoryFragment() {
         // Required empty public constructor
     }
 
-    public static KKboxPlayListCategoryFragmentKKbox newInstance() {
+    public static KKboxPlayListCategoryFragment newInstance() {
         Log.e(TAG, "newInstance: ");
-        KKboxPlayListCategoryFragmentKKbox fragment = new KKboxPlayListCategoryFragmentKKbox();
+        KKboxPlayListCategoryFragment fragment = new KKboxPlayListCategoryFragment();
 
         return fragment;
     }
@@ -82,7 +80,7 @@ public class KKboxPlayListCategoryFragmentKKbox extends KKboxBaseFragment {
         showLoadingProgressBar();
 
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_kkbox_play_list_category, container, false);
+        return inflater.inflate(R.layout.fragment_kkbox_playlist_category, container, false);
     }
 
     @Override
