@@ -21,6 +21,8 @@ import com.kj.kevin.hitsmusic.R;
 import com.kj.kevin.hitsmusic.fragment.KKboxBaseFragment;
 import com.kj.kevin.hitsmusic.fragment.KKboxPlayListCategoryFragment;
 
+import java.lang.ref.WeakReference;
+
 public class KKboxActivity extends AppCompatActivity {
     public static final String TAG = "KKboxActivity";
 
@@ -46,19 +48,7 @@ public class KKboxActivity extends AppCompatActivity {
     }
 
     private void initJobHandler() {
-        mJobHandler = new Handler() {
-            @Override
-            public void handleMessage(Message msg) {
-                super.handleMessage(msg);
-
-                FragmentManager manager = getSupportFragmentManager();
-                KKboxBaseFragment fragment = (KKboxBaseFragment) manager.findFragmentById(R.id.container);
-
-                if (fragment != null) {
-                    fragment.getData();
-                }
-            }
-        };
+        mJobHandler = new JobHandler(this);
     }
 
     private void placePlaylistCategoryFragment() {
@@ -90,5 +80,27 @@ public class KKboxActivity extends AppCompatActivity {
 
     public Handler getJobHandler() {
         return mJobHandler;
+    }
+
+    private static class JobHandler extends Handler {
+        private final WeakReference<KKboxActivity> mActivity;
+
+        JobHandler(KKboxActivity activity){
+            super();
+            mActivity = new WeakReference<>(activity);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            if (mActivity != null) {
+                KKboxActivity kkboxActivity = mActivity.get();
+                FragmentManager manager = kkboxActivity.getSupportFragmentManager();
+                KKboxBaseFragment fragment = (KKboxBaseFragment) manager.findFragmentById(R.id.container);
+
+                if (fragment != null) {
+                    fragment.getData();
+                }
+            }
+        }
     }
 }
