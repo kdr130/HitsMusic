@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.kj.kevin.hitsmusic.R;
-import com.kj.kevin.hitsmusic.fragment.KKboxPlayListFragmentKKbox;
+import com.kj.kevin.hitsmusic.fragment.KKboxPlayListFragment;
 import com.kj.kevin.hitsmusic.model.ImageInfo;
 import com.kj.kevin.hitsmusic.model.PlayListInfo;
 
@@ -24,7 +24,7 @@ public class KKboxPlayListAdapter extends RecyclerView.Adapter<KKboxPlayListAdap
     public static final String TAG = "KKboxPlayListAdapter";
 
     private List<PlayListInfo> mData;
-    private KKboxPlayListFragmentKKbox.OnPlayListClickedListener mPlayListClickedListener;
+    private KKboxPlayListFragment.OnPlayListClickedListener mPlayListClickedListener;
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         private TextView title;
@@ -40,7 +40,7 @@ public class KKboxPlayListAdapter extends RecyclerView.Adapter<KKboxPlayListAdap
         }
     }
 
-    public KKboxPlayListAdapter(List<PlayListInfo> list, KKboxPlayListFragmentKKbox.OnPlayListClickedListener listener) {
+    public KKboxPlayListAdapter(List<PlayListInfo> list, KKboxPlayListFragment.OnPlayListClickedListener listener) {
         mData = list;
         mPlayListClickedListener = listener;
     }

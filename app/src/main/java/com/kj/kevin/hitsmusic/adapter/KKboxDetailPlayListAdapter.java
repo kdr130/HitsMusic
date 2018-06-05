@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.kj.kevin.hitsmusic.R;
-import com.kj.kevin.hitsmusic.fragment.KKboxDetailPlayListFragmentKKbox;
+import com.kj.kevin.hitsmusic.fragment.KKboxDetailPlayListFragment;
 import com.kj.kevin.hitsmusic.model.ImageInfo;
 import com.kj.kevin.hitsmusic.model.SongInfo;
 
@@ -22,9 +22,9 @@ import java.util.List;
 public class KKboxDetailPlayListAdapter extends RecyclerView.Adapter<KKboxDetailPlayListAdapter.ViewHolder> {
 
     private List<SongInfo> mSongList;
-    private KKboxDetailPlayListFragmentKKbox.OnSongClickedListener mListener;
+    private KKboxDetailPlayListFragment.OnSongClickedListener mListener;
 
-    public KKboxDetailPlayListAdapter(List<SongInfo> data, KKboxDetailPlayListFragmentKKbox.OnSongClickedListener listener) {
+    public KKboxDetailPlayListAdapter(List<SongInfo> data, KKboxDetailPlayListFragment.OnSongClickedListener listener) {
         mSongList = data;
         mListener = listener;
     }

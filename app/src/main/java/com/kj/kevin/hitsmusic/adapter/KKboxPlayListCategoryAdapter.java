@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.kj.kevin.hitsmusic.R;
-import com.kj.kevin.hitsmusic.fragment.KKboxPlayListCategoryFragment;
+import com.kj.kevin.hitsmusic.fragment.PlayListCategoryFragment;
 
 import java.util.List;
 
@@ -18,7 +18,7 @@ import java.util.List;
 public class KKboxPlayListCategoryAdapter extends RecyclerView.Adapter<KKboxPlayListCategoryAdapter.ViewHolder> {
 
     private List<Integer> mCategoryResIdList;
-    private KKboxPlayListCategoryFragment.OnCategoryClickedListener mListener;
+    private PlayListCategoryFragment.OnCategoryClickedListener mListener;
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
         private TextView title;
@@ -29,7 +29,7 @@ public class KKboxPlayListCategoryAdapter extends RecyclerView.Adapter<KKboxPlay
         }
     }
 
-    public KKboxPlayListCategoryAdapter(List<Integer> list, KKboxPlayListCategoryFragment.OnCategoryClickedListener listener) {
+    public KKboxPlayListCategoryAdapter(List<Integer> list, PlayListCategoryFragment.OnCategoryClickedListener listener) {
         mCategoryResIdList = list;
         mListener = listener;
     }

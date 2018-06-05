@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class KKboxPlayListFragmentKKbox extends KKboxBaseFragment {
+public class KKboxPlayListFragment extends BaseFragment {
     public static final String TAG = "KKboxPlayListFragment";
     private static final String ARG_CATEGORY_RESID = "category_resId";
 
@@ -35,7 +35,7 @@ public class KKboxPlayListFragmentKKbox extends KKboxBaseFragment {
         public void onPlayListClicked(int position) {
             Log.e(TAG, "onPlayListClicked: position: " + position + ", id: " + mData.get(position).getId() );
 
-            KKboxDetailPlayListFragmentKKbox kkboxDetailPlayListFragment = KKboxDetailPlayListFragmentKKbox.newInstance(mData.get(position).getId());
+            KKboxDetailPlayListFragment kkboxDetailPlayListFragment = KKboxDetailPlayListFragment.newInstance(mData.get(position).getId());
             FragmentManager manager = getFragmentManager();
             FragmentTransaction transaction = manager.beginTransaction();
             transaction.addToBackStack(null);
@@ -48,13 +48,13 @@ public class KKboxPlayListFragmentKKbox extends KKboxBaseFragment {
         void onPlayListClicked(int position);
     }
 
-    public KKboxPlayListFragmentKKbox() {
+    public KKboxPlayListFragment() {
         // Required empty public constructor
     }
 
     // TODO: Rename and change types and number of parameters
-    public static KKboxPlayListFragmentKKbox newInstance(int categoryResId) {
-        KKboxPlayListFragmentKKbox fragment = new KKboxPlayListFragmentKKbox();
+    public static KKboxPlayListFragment newInstance(int categoryResId) {
+        KKboxPlayListFragment fragment = new KKboxPlayListFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_CATEGORY_RESID, categoryResId);
         fragment.setArguments(args);
@@ -109,10 +109,10 @@ public class KKboxPlayListFragmentKKbox extends KKboxBaseFragment {
         mData = new ArrayList<>();
 
         switch (mCategoryResId) {
-            case KKboxPlayListCategoryFragment.PlaylistCategoryResId.CHART:
+            case PlayListCategoryFragment.PlaylistCategoryResId.CHART:
                 getChartPlaylist();
                 break;
-            case KKboxPlayListCategoryFragment.PlaylistCategoryResId.NEW_HITS:
+            case PlayListCategoryFragment.PlaylistCategoryResId.NEW_HITS:
                 getNewHitsPlaylist();
                 break;
             default:

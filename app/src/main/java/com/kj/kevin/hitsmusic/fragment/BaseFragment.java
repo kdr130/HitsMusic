@@ -16,8 +16,8 @@ import static com.kj.kevin.hitsmusic.activity.KKboxActivity.MESSENGER_INTENT_KEY
  * Created by Kevin on 2018/6/2.
  */
 
-public class KKboxBaseFragment extends Fragment {
-    private static final String TAG = "KKboxBaseFragment";
+public class BaseFragment extends Fragment {
+    private static final String TAG = "BaseFragment";
 
     protected void showLoadingProgressBar() {
         ((KKboxActivity)getActivity()).showLoadingProgressBar();

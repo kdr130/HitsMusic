@@ -23,8 +23,8 @@ import android.widget.ProgressBar;
 import com.kj.kevin.hitsmusic.BuildConfig;
 import com.kj.kevin.hitsmusic.JobSchedulerService;
 import com.kj.kevin.hitsmusic.R;
-import com.kj.kevin.hitsmusic.fragment.KKboxBaseFragment;
-import com.kj.kevin.hitsmusic.fragment.KKboxPlayListCategoryFragment;
+import com.kj.kevin.hitsmusic.fragment.BaseFragment;
+import com.kj.kevin.hitsmusic.fragment.PlayListCategoryFragment;
 
 import java.lang.ref.WeakReference;
 
@@ -91,7 +91,7 @@ public class KKboxActivity extends AppCompatActivity {
     }
 
     private void placePlaylistCategoryFragment() {
-        KKboxPlayListCategoryFragment kKboxPlayListCategoryFragment = KKboxPlayListCategoryFragment.newInstance();
+        PlayListCategoryFragment kKboxPlayListCategoryFragment = PlayListCategoryFragment.newInstance();
 
         FragmentManager manager = getSupportFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
@@ -134,7 +134,7 @@ public class KKboxActivity extends AppCompatActivity {
             if (mActivity != null) {
                 KKboxActivity kkboxActivity = mActivity.get();
                 FragmentManager manager = kkboxActivity.getSupportFragmentManager();
-                KKboxBaseFragment fragment = (KKboxBaseFragment) manager.findFragmentById(R.id.container);
+                BaseFragment fragment = (BaseFragment) manager.findFragmentById(R.id.container);
 
                 if (fragment != null) {
                     fragment.getData();

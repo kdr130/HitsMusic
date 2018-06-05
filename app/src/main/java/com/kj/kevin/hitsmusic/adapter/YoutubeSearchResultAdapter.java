@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.kj.kevin.hitsmusic.R;
-import com.kj.kevin.hitsmusic.activity.YoutubePlayerActivity;
+import com.kj.kevin.hitsmusic.fragment.YoutubeRelatedSongPlayerFragment;
 import com.kj.kevin.hitsmusic.model.YoutubeSearchResult;
 
 import java.util.List;
@@ -22,7 +22,7 @@ import java.util.List;
 public class YoutubeSearchResultAdapter extends RecyclerView.Adapter<YoutubeSearchResultAdapter.ViewHolder>{
 
     private List<YoutubeSearchResult.YoutubeItem> mData;
-    private YoutubePlayerActivity.OnSearchedResultClickedListener mSearchedResultListener;
+    private YoutubeRelatedSongPlayerFragment.OnSearchedResultClickedListener mSearchedResultListener;
 
     class ViewHolder extends RecyclerView.ViewHolder {
         private ImageView img;
@@ -38,7 +38,7 @@ public class YoutubeSearchResultAdapter extends RecyclerView.Adapter<YoutubeSear
         }
     }
 
-    public YoutubeSearchResultAdapter(List<YoutubeSearchResult.YoutubeItem> data, YoutubePlayerActivity.OnSearchedResultClickedListener searchedResultListener) {
+    public YoutubeSearchResultAdapter(List<YoutubeSearchResult.YoutubeItem> data, YoutubeRelatedSongPlayerFragment.OnSearchedResultClickedListener searchedResultListener) {
         mData = data;
         mSearchedResultListener = searchedResultListener;
     }

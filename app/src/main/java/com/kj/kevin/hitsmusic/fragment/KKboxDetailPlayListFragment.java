@@ -1,9 +1,9 @@
 package com.kj.kevin.hitsmusic.fragment;
 
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,7 +15,6 @@ import android.view.ViewGroup;
 import com.kj.kevin.hitsmusic.ApiMethods;
 import com.kj.kevin.hitsmusic.MyObserver;
 import com.kj.kevin.hitsmusic.R;
-import com.kj.kevin.hitsmusic.activity.YoutubePlayerActivity;
 import com.kj.kevin.hitsmusic.adapter.KKboxDetailPlayListAdapter;
 import com.kj.kevin.hitsmusic.model.SongInfo;
 
@@ -23,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class KKboxDetailPlayListFragmentKKbox extends KKboxBaseFragment {
+public class KKboxDetailPlayListFragment extends BaseFragment {
     public static final String TAG = "KKboxDetailPlayList";
     public static final String SONG_DATA = "song_data";
     public static final String SONG_BUNDLE = "song_bundle";
@@ -37,12 +36,18 @@ public class KKboxDetailPlayListFragmentKKbox extends KKboxBaseFragment {
         public void onSongClicked(int position) {
             Log.e(TAG, "onSongClicked: data: " + mSongList.get(position) );
 
-            Intent intent = new Intent(getActivity(), YoutubePlayerActivity.class);
-            Bundle bundle = new Bundle();
+//            Intent intent = new Intent(getActivity(), YoutubePlayerActivity.class);
+//            Bundle bundle = new Bundle();
+//
+//            bundle.putParcelable(SONG_DATA, mSongList.get(position));
+//            intent.putExtra(SONG_BUNDLE, bundle);
+//            startActivity(intent);
 
-            bundle.putParcelable(SONG_DATA, mSongList.get(position));
-            intent.putExtra(SONG_BUNDLE, bundle);
-            startActivity(intent);
+            YoutubeRelatedSongPlayerFragment fragment = YoutubeRelatedSongPlayerFragment.newInstance(mSongList.get(position));
+            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+            transaction.addToBackStack(null);
+            transaction.replace(R.id.container, fragment).commitAllowingStateLoss();
+
         }
     };
 
@@ -50,13 +55,13 @@ public class KKboxDetailPlayListFragmentKKbox extends KKboxBaseFragment {
         void onSongClicked(int position);
     }
 
-    public KKboxDetailPlayListFragmentKKbox() {
+    public KKboxDetailPlayListFragment() {
         // Required empty public constructor
     }
 
 
-    public static KKboxDetailPlayListFragmentKKbox newInstance(String playlistId) {
-        KKboxDetailPlayListFragmentKKbox fragment = new KKboxDetailPlayListFragmentKKbox();
+    public static KKboxDetailPlayListFragment newInstance(String playlistId) {
+        KKboxDetailPlayListFragment fragment = new KKboxDetailPlayListFragment();
         Bundle args = new Bundle();
         args.putSerializable(ARG_PLAYLIST_ID, playlistId);
         fragment.setArguments(args);
