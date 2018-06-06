@@ -87,10 +87,19 @@ public class YoutubeRelatedSongPlayerFragment extends BaseFragment {
         Log.e(TAG, "onViewCreated: ");
 
         mRecommendSearchResultRecyclerView = view.findViewById(R.id.recommend_search_result);
+
+        if (mSearchedVideoIdList != null) {
+            initVIew();
+        }
     }
 
 
     public void getData() {
+        if (mSearchedVideoIdList != null && mYouTubePlayer != null) {
+            initVIew();
+            return;
+        }
+
         if(getArguments() == null && getArguments().getParcelable(SONG_DATA) == null) {
             return;
         }
