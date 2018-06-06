@@ -23,7 +23,7 @@ import com.kj.kevin.hitsmusic.api.API;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PlayListCategoryFragment extends BaseFragment {
+public class KKboxPlayListCategoryFragment extends BaseFragment {
     private static final String TAG = "CategoryFragment";
 
     private List<Integer> mCategoryResIdList;
@@ -56,13 +56,13 @@ public class PlayListCategoryFragment extends BaseFragment {
         void onCategoryClicked(int position);
     }
 
-    public PlayListCategoryFragment() {
+    public KKboxPlayListCategoryFragment() {
         // Required empty public constructor
     }
 
-    public static PlayListCategoryFragment newInstance() {
+    public static KKboxPlayListCategoryFragment newInstance() {
         Log.e(TAG, "newInstance: ");
-        PlayListCategoryFragment fragment = new PlayListCategoryFragment();
+        KKboxPlayListCategoryFragment fragment = new KKboxPlayListCategoryFragment();
 
         return fragment;
     }

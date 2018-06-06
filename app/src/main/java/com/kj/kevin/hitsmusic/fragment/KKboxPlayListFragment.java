@@ -109,10 +109,10 @@ public class KKboxPlayListFragment extends BaseFragment {
         mData = new ArrayList<>();
 
         switch (mCategoryResId) {
-            case PlayListCategoryFragment.PlaylistCategoryResId.CHART:
+            case KKboxPlayListCategoryFragment.PlaylistCategoryResId.CHART:
                 getChartPlaylist();
                 break;
-            case PlayListCategoryFragment.PlaylistCategoryResId.NEW_HITS:
+            case KKboxPlayListCategoryFragment.PlaylistCategoryResId.NEW_HITS:
                 getNewHitsPlaylist();
                 break;
             default:
@@ -122,7 +122,7 @@ public class KKboxPlayListFragment extends BaseFragment {
 
     private void getChartPlaylist() {
         Log.e(TAG, "getChartPlaylist: ");
-        ApiMethods.getNewHitsPlaylist(new MyObserver<PlayListInfo>("getNewHitsPlaylist", new MyObserver.MyObserverNextListener<PlayListInfo>() {
+        ApiMethods.getChart(new MyObserver<PlayListInfo>("getChart", new MyObserver.MyObserverNextListener<PlayListInfo>() {
             @Override
             public void onNext(PlayListInfo playListInfo) {
                 Log.e(TAG, "onNext: " + playListInfo.toString());
@@ -139,7 +139,7 @@ public class KKboxPlayListFragment extends BaseFragment {
 
     private void getNewHitsPlaylist() {
         Log.e(TAG, "getNewHitsPlaylist: ");
-        ApiMethods.getChart(new MyObserver<PlayListInfo>("getChart", new MyObserver.MyObserverNextListener<PlayListInfo>() {
+        ApiMethods.getNewHitsPlaylist(new MyObserver<PlayListInfo>("getNewHitsPlaylist", new MyObserver.MyObserverNextListener<PlayListInfo>() {
             @Override
             public void onNext(PlayListInfo playListInfo) {
                 Log.e(TAG, "onNext: " + playListInfo.toString());

@@ -24,7 +24,7 @@ import com.kj.kevin.hitsmusic.BuildConfig;
 import com.kj.kevin.hitsmusic.JobSchedulerService;
 import com.kj.kevin.hitsmusic.R;
 import com.kj.kevin.hitsmusic.fragment.BaseFragment;
-import com.kj.kevin.hitsmusic.fragment.PlayListCategoryFragment;
+import com.kj.kevin.hitsmusic.fragment.KKboxPlayListCategoryFragment;
 
 import java.lang.ref.WeakReference;
 
@@ -91,11 +91,11 @@ public class KKboxActivity extends AppCompatActivity {
     }
 
     private void placePlaylistCategoryFragment() {
-        PlayListCategoryFragment kKboxPlayListCategoryFragment = PlayListCategoryFragment.newInstance();
+        KKboxPlayListCategoryFragment kkboxPlayListCategoryFragment = KKboxPlayListCategoryFragment.newInstance();
 
         FragmentManager manager = getSupportFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
-        transaction.add(R.id.container, kKboxPlayListCategoryFragment);
+        transaction.add(R.id.container, kkboxPlayListCategoryFragment);
         transaction.commitAllowingStateLoss();
     }
 
