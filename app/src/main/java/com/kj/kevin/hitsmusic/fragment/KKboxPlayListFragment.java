@@ -35,7 +35,7 @@ public class KKboxPlayListFragment extends BaseFragment {
         public void onPlayListClicked(int position) {
             Log.e(TAG, "onPlayListClicked: position: " + position + ", id: " + mData.get(position).getId() );
 
-            KKboxDetailPlayListFragment kkboxDetailPlayListFragment = KKboxDetailPlayListFragment.newInstance(mData.get(position).getId());
+            KKboxDetailPlayListFragment kkboxDetailPlayListFragment = KKboxDetailPlayListFragment.newInstance(mData.get(position).getId(), mData.get(position).getTitle());
             FragmentManager manager = getFragmentManager();
             FragmentTransaction transaction = manager.beginTransaction();
             transaction.addToBackStack(null);

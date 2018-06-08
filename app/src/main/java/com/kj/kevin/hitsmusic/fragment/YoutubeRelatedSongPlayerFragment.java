@@ -28,7 +28,7 @@ import java.util.List;
 
 public class YoutubeRelatedSongPlayerFragment extends BaseFragment {
     private static final String TAG = "YoutubePlayerFragment";
-    public static final String SONG_DATA = "song_data";
+    public static final String SONG_LIST = "song_list";
 
     private static String YOUTUBE_API_KEY;
 
@@ -54,10 +54,10 @@ public class YoutubeRelatedSongPlayerFragment extends BaseFragment {
         // Required empty public constructor
     }
 
-    public static YoutubeRelatedSongPlayerFragment newInstance(SongInfo songData) {
+    public static YoutubeRelatedSongPlayerFragment newInstance(ArrayList<SongInfo> songList) {
         YoutubeRelatedSongPlayerFragment fragment = new YoutubeRelatedSongPlayerFragment();
         Bundle args = new Bundle();
-        args.putParcelable(SONG_DATA, songData);
+        args.putParcelableArrayList(SONG_LIST, songList);
         fragment.setArguments(args);
 
         return fragment;
@@ -67,7 +67,7 @@ public class YoutubeRelatedSongPlayerFragment extends BaseFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        YOUTUBE_API_KEY = getResources().getString(R.string.YOUTUBE_API_KEY);;
+        YOUTUBE_API_KEY = getResources().getString(R.string.YOUTUBE_API_KEY);
     }
 
     @Override
@@ -100,26 +100,30 @@ public class YoutubeRelatedSongPlayerFragment extends BaseFragment {
             return;
         }
 
-        if(getArguments() == null && getArguments().getParcelable(SONG_DATA) == null) {
+        if(getArguments() == null && getArguments().getParcelable(SONG_LIST) == null) {
             return;
         }
 
-        SongInfo songData = getArguments().getParcelable(SONG_DATA);
+        List<SongInfo> songList = getArguments().getParcelableArrayList(SONG_LIST);
 
-        if (songData != null) {
-            Log.e(TAG, "onCreate: mSongData: " + songData.toString() );
+        if (songList != null) {
+            if (songList.size() == 1) {
+                Log.e(TAG, "onCreate: mSongData: " + songList.toString() );
 
-            String songName = songData.getName();
-            // remove (English Song Name) to improve search result
-            int leftPara = songName.indexOf(" (");
-            if (leftPara > 0) {
-                songName = songName.substring(0, leftPara);
+                String songName = songList.get(0).getName();
+                // remove (English Song Name) to improve search result
+                int leftPara = songName.indexOf(" (");
+                if (leftPara > 0) {
+                    songName = songName.substring(0, leftPara);
+                }
+
+                String artistName = songList.get(0).getAlbum().getArtist().getName();
+                String searchKeyword = songName + " " + artistName;
+
+                searchYoutube(searchKeyword);
+            } else {
+                searchYoutube(songList);
             }
-
-            String artistName = songData.getAlbum().getArtist().getName();
-            String searchKeyword = songName + " " + artistName;
-
-            searchYoutube(searchKeyword);
         }
     }
 
@@ -150,6 +154,38 @@ public class YoutubeRelatedSongPlayerFragment extends BaseFragment {
                 initVIew();
             }
         }));
+    }
+
+    private void searchYoutube(List<SongInfo> list) {
+        ApiMethods.getPlaylistYoutubeSearchResult(YOUTUBE_API_KEY, list, new MyObserver<>("xxx", new MyObserver.MyObserverNextListener<YoutubeSearchResult>() {
+            @Override
+            public void onNext(YoutubeSearchResult searchResult) {
+                List<YoutubeSearchResult.YoutubeItem> resultItem = searchResult.getItems();
+                Log.e(TAG, "onNext: mSearchedResult.size: " + resultItem.size() );
+                if (resultItem.size() == 0) {
+                    //Toast.makeText(getActivity(), getString(R.string.youtube_search_no_result), Toast.LENGTH_SHORT).show();
+                    Log.e(TAG, "onNext: search no related video " );
+                } else {
+                    mSearchedResult.addAll(searchResult.getItems());
+                }
+
+                for (int i = 0; i < resultItem.size(); i++) {
+                    Log.e(TAG, "onNext: VideoId: " +  resultItem.get(i).getId().getVideoId());
+                    mSearchedVideoIdList.add(resultItem.get(i).getId().getVideoId());
+                }
+                Log.e(TAG, "onNext: searchedVideoIdList.size: " + mSearchedVideoIdList.size());
+
+            }
+        }, new MyObserver.MyObserverCompleteListener() {
+            @Override
+            public void onComplete() {
+                Log.e(TAG, "onComplete: " );
+
+                initYoutubePlayerView();
+                initVIew();
+            }
+        }));
+
     }
 
     private void initYoutubePlayerView() {

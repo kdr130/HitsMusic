@@ -11,6 +11,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.kj.kevin.hitsmusic.ApiMethods;
 import com.kj.kevin.hitsmusic.MyObserver;
@@ -24,30 +26,38 @@ import java.util.List;
 
 public class KKboxDetailPlayListFragment extends BaseFragment {
     public static final String TAG = "KKboxDetailPlayList";
-    public static final String SONG_DATA = "song_data";
-    public static final String SONG_BUNDLE = "song_bundle";
     private static final String ARG_PLAYLIST_ID = "playlist_id";
+    private static final String ARG_PLAYLIST_NAME = "playlist_name";
 
-    private String mPlaylistId;
+    private String mPlaylistId, mPlaylistName;
     private List<SongInfo> mSongList;
     private RecyclerView mDetailRecycleView;
+    private TextView mPlaylistNameView;
+    private ImageView mPlayAll;
     private OnSongClickedListener mOnSongClickedListener = new OnSongClickedListener() {
         @Override
         public void onSongClicked(int position) {
             Log.e(TAG, "onSongClicked: data: " + mSongList.get(position) );
+            List<SongInfo> songList = new ArrayList<>();
+            songList.add(mSongList.get(position));
 
-//            Intent intent = new Intent(getActivity(), YoutubePlayerActivity.class);
-//            Bundle bundle = new Bundle();
-//
-//            bundle.putParcelable(SONG_DATA, mSongList.get(position));
-//            intent.putExtra(SONG_BUNDLE, bundle);
-//            startActivity(intent);
-
-            YoutubeRelatedSongPlayerFragment fragment = YoutubeRelatedSongPlayerFragment.newInstance(mSongList.get(position));
+            YoutubeRelatedSongPlayerFragment fragment = YoutubeRelatedSongPlayerFragment.newInstance((ArrayList<SongInfo>)songList);
             FragmentTransaction transaction = getFragmentManager().beginTransaction();
             transaction.addToBackStack(null);
             transaction.replace(R.id.container, fragment).commitAllowingStateLoss();
 
+        }
+    };
+
+    private View.OnClickListener mOnPlayAllClicked = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            Log.e(TAG, "mOnPlayAllClicked: " );
+
+            YoutubeRelatedSongPlayerFragment fragment = YoutubeRelatedSongPlayerFragment.newInstance((ArrayList<SongInfo>) mSongList);
+            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+            transaction.addToBackStack(null);
+            transaction.replace(R.id.container, fragment).commitAllowingStateLoss();
         }
     };
 
@@ -60,10 +70,11 @@ public class KKboxDetailPlayListFragment extends BaseFragment {
     }
 
 
-    public static KKboxDetailPlayListFragment newInstance(String playlistId) {
+    public static KKboxDetailPlayListFragment newInstance(String playlistId, String playlistName) {
         KKboxDetailPlayListFragment fragment = new KKboxDetailPlayListFragment();
         Bundle args = new Bundle();
-        args.putSerializable(ARG_PLAYLIST_ID, playlistId);
+        args.putString(ARG_PLAYLIST_ID, playlistId);
+        args.putString(ARG_PLAYLIST_NAME, playlistName);
         fragment.setArguments(args);
         return fragment;
     }
@@ -73,6 +84,9 @@ public class KKboxDetailPlayListFragment extends BaseFragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mPlaylistId = getArguments().getString(ARG_PLAYLIST_ID);
+            mPlaylistName = getArguments().getString(ARG_PLAYLIST_NAME);
+
+            Log.e(TAG, "onCreate: mPlaylistId: " + mPlaylistId + ", mPlaylistName: " + mPlaylistName );
         }
     }
 
@@ -93,6 +107,8 @@ public class KKboxDetailPlayListFragment extends BaseFragment {
         Log.e(TAG, "onViewCreated: ");
 
         mDetailRecycleView = view.findViewById(R.id.detail_list);
+        mPlaylistNameView = view.findViewById(R.id.playlist_name);
+        mPlayAll = view.findViewById(R.id.playAll);
         setActionBarTitle(getString(R.string.kkbox_detail_playlist_actionbar_title));
 
         if (mSongList != null) {
@@ -139,6 +155,9 @@ public class KKboxDetailPlayListFragment extends BaseFragment {
             return;
         }
 
+        mPlaylistNameView.setText(mPlaylistName);
+        mPlayAll.setVisibility(View.VISIBLE);
+        mPlayAll.setOnClickListener(mOnPlayAllClicked);
         mDetailRecycleView.setAdapter(new KKboxDetailPlayListAdapter(mSongList, mOnSongClickedListener));
         mDetailRecycleView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mDetailRecycleView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL));

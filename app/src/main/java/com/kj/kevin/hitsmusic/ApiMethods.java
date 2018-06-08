@@ -1,5 +1,7 @@
 package com.kj.kevin.hitsmusic;
 
+import android.util.Log;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -92,5 +94,28 @@ public class ApiMethods {
 
     public static void getYoutubeSearchResult(String developerKey, String searchKeyword, MyObserver<YoutubeSearchResult> observer) {
         ApiSubscribe(API.getYoutubeService().getSearchResult(developerKey, "snippet", "video", searchKeyword, 10), observer);
+    }
+
+    public static void getPlaylistYoutubeSearchResult(final String developerKey, List<SongInfo> songList, MyObserver observer) {
+        ApiSubscribe(Observable.fromIterable(songList)
+                .flatMap(new Function<SongInfo, ObservableSource<?>>() {
+                    @Override
+                    public ObservableSource<?> apply(@NonNull SongInfo songData) throws Exception {
+                        String songName = songData.getName();
+                        // remove (English Song Name) to improve search result
+                        int leftPara = songName.indexOf(" (");
+                        if (leftPara > 0) {
+                            songName = songName.substring(0, leftPara);
+                        }
+
+                        String artistName = songData.getAlbum().getArtist().getName();
+                        String keyword = songName + " " + artistName;
+
+                        Log.e("getPlaylistYoutubeSR", "apply: keyword: " + keyword);
+
+                        return API.getYoutubeService().getSearchResult(developerKey, "snippet", "video", keyword, 1);
+                    }
+                }), observer);
+
     }
 }

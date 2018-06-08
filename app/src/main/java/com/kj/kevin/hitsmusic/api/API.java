@@ -135,7 +135,7 @@ public class API {
         return kkboxService;
     }
 
-    public static void setYoutubeSerivce() {
+    public static void setYouTubeService() {
         Gson gson = new GsonBuilder()
                 .setLenient()
                 .create();
@@ -155,7 +155,7 @@ public class API {
 
     public static YoutubeAPI getYoutubeService() {
         if ( youtubeService == null ) {
-            setYoutubeSerivce();
+            setYouTubeService();
         }
         return youtubeService;
     }

@@ -55,9 +55,9 @@ public class YoutubeSearchResultAdapter extends RecyclerView.Adapter<YoutubeSear
         YoutubeSearchResult.YoutubeItem youtubeItem = mData.get(position);
 
         if (youtubeItem.isPlaying()) {
-            holder.itemView.setBackgroundColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.colorPlayingSongBackground));
+            holder.itemView.setBackgroundColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.colorYouTubePlayingBg));
         } else {
-            holder.itemView.setBackgroundColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.colorNotPlayingSongBackground));
+            holder.itemView.setBackgroundColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.colorYouTubeNotPlayingBg));
         }
 
         Glide.with(holder.itemView.getContext()).load(youtubeItem.getSnippet().getThumbnails().getDefaultThumbnail().getUrl()).into(holder.img);
