@@ -38,7 +38,7 @@ public class ApiMethods {
     }
 
     // 取得最新主題歌單列表
-    public static void getNewHitsPlaylist(MyObserver <PlayListInfo> observer) {
+    public static void getNewHitsPlaylist(MyObserver <List<PlayListInfo>> observer) {
         ApiSubscribe(API.getKKboxService().getNewHitsPlaylist("TW")
                 .flatMap(new Function<JsonObject, ObservableSource<?>>() {
                     @Override
@@ -49,14 +49,14 @@ public class ApiMethods {
                         Type listType = new TypeToken<List<PlayListInfo>>() {}.getType();
                         playListInfos = new Gson().fromJson(jsonArray, listType);
 
-                        return Observable.fromIterable(playListInfos);
+                        return Observable.just(playListInfos);
                     }
                 })
                 , observer);
     }
 
     // 取得歌曲排行榜列表
-    public static void getChart(MyObserver <PlayListInfo> observer) {
+    public static void getChartPlaylist(MyObserver <List<PlayListInfo>> observer) {
         ApiSubscribe(API.getKKboxService().getCharts("TW")
                         .flatMap(new Function<JsonObject, ObservableSource<?>>() {
                             @Override
@@ -67,7 +67,7 @@ public class ApiMethods {
                                 Type listType = new TypeToken<List<PlayListInfo>>() {}.getType();
                                 playListInfos = new Gson().fromJson(jsonArray, listType);
 
-                                return Observable.fromIterable(playListInfos);
+                                return Observable.just(playListInfos);
                             }
                         })
                 , observer);

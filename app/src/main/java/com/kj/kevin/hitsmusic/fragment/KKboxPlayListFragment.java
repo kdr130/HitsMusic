@@ -122,11 +122,11 @@ public class KKboxPlayListFragment extends BaseFragment {
 
     private void getChartPlaylist() {
         Log.e(TAG, "getChartPlaylist: ");
-        ApiMethods.getChart(new MyObserver<PlayListInfo>("getChart", new MyObserver.MyObserverNextListener<PlayListInfo>() {
+        ApiMethods.getChartPlaylist(new MyObserver<List<PlayListInfo>>("getChartPlaylist", new MyObserver.MyObserverNextListener<List<PlayListInfo>>() {
             @Override
-            public void onNext(PlayListInfo playListInfo) {
-                Log.e(TAG, "onNext: " + playListInfo.toString());
-                mData.add(playListInfo);
+            public void onNext(List<PlayListInfo> list) {
+                Log.e(TAG, "onNext: " + list.toString());
+                mData.addAll(list);
             }
         }, new MyObserver.MyObserverCompleteListener() {
             @Override
@@ -139,11 +139,11 @@ public class KKboxPlayListFragment extends BaseFragment {
 
     private void getNewHitsPlaylist() {
         Log.e(TAG, "getNewHitsPlaylist: ");
-        ApiMethods.getNewHitsPlaylist(new MyObserver<PlayListInfo>("getNewHitsPlaylist", new MyObserver.MyObserverNextListener<PlayListInfo>() {
+        ApiMethods.getNewHitsPlaylist(new MyObserver<List<PlayListInfo>>("getNewHitsPlaylist", new MyObserver.MyObserverNextListener<List<PlayListInfo>>() {
             @Override
-            public void onNext(PlayListInfo playListInfo) {
-                Log.e(TAG, "onNext: " + playListInfo.toString());
-                mData.add(playListInfo);
+            public void onNext(List<PlayListInfo> list) {
+                Log.e(TAG, "onNext: size: " + list.size());
+                mData.addAll(list);
             }
         }, new MyObserver.MyObserverCompleteListener() {
             @Override
