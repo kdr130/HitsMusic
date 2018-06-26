@@ -110,6 +110,7 @@ public class KKboxActivity extends AppCompatActivity {
     }
 
     public void showLoadingProgressBar() {
+        mProgressBar.bringToFront();
         mProgressBar.setVisibility(View.VISIBLE);
     }
 

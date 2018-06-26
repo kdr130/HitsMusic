@@ -32,12 +32,16 @@ public class YoutubeRelatedSongPlayerFragment extends BaseFragment {
 
     private static String YOUTUBE_API_KEY;
 
+    private List<SongInfo> mInputSongList;
     private List<String> mSearchedVideoIdList = new ArrayList<>();
     private List<YoutubeSearchResult.YoutubeItem> mSearchedResult = new ArrayList<>();
     private RecyclerView mRecommendSearchResultRecyclerView;
     private YoutubeSearchResultAdapter mYoutubeSearchResultAdapter;
     private YouTubePlayer mYouTubePlayer;
     private int mPlayingIndex = 0;
+    private boolean mIsFirst = false;
+    private int mLoadedIndex = 0;
+    private boolean mCanSearchMore = true;
 
     private OnSearchedResultClickedListener mSearchedResultListener = new OnSearchedResultClickedListener() {
         @Override
@@ -74,7 +78,6 @@ public class YoutubeRelatedSongPlayerFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         Log.e(TAG, "onCreateView: ");
-        showLoadingProgressBar();
 
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.youtube_relatedsong_player_fragment, container, false);
@@ -83,8 +86,9 @@ public class YoutubeRelatedSongPlayerFragment extends BaseFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         Log.e(TAG, "onViewCreated: ");
+
+        showLoadingProgressBar();
 
         mRecommendSearchResultRecyclerView = view.findViewById(R.id.recommend_search_result);
 
@@ -104,25 +108,25 @@ public class YoutubeRelatedSongPlayerFragment extends BaseFragment {
             return;
         }
 
-        List<SongInfo> songList = getArguments().getParcelableArrayList(SONG_LIST);
+        mInputSongList = getArguments().getParcelableArrayList(SONG_LIST);
 
-        if (songList != null) {
-            if (songList.size() == 1) {
-                Log.e(TAG, "onCreate: mSongData: " + songList.toString() );
+        if (mInputSongList != null) {
+            if (mInputSongList.size() == 1) {
+                Log.e(TAG, "onCreate: mSongData: " + mInputSongList.toString() );
 
-                String songName = songList.get(0).getName();
+                String songName = mInputSongList.get(0).getName();
                 // remove (English Song Name) to improve search result
                 int leftPara = songName.indexOf(" (");
                 if (leftPara > 0) {
                     songName = songName.substring(0, leftPara);
                 }
 
-                String artistName = songList.get(0).getAlbum().getArtist().getName();
+                String artistName = mInputSongList.get(0).getAlbum().getArtist().getName();
                 String searchKeyword = songName + " " + artistName;
 
                 searchYoutube(searchKeyword);
             } else {
-                searchYoutube(songList);
+                searchYoutube(mInputSongList,mLoadedIndex ,mLoadedIndex+5);
             }
         }
     }
@@ -149,21 +153,31 @@ public class YoutubeRelatedSongPlayerFragment extends BaseFragment {
             @Override
             public void onComplete() {
                 Log.e(TAG, "onComplete: " );
-
                 initYoutubePlayerView();
                 initVIew();
             }
         }));
     }
 
-    private void searchYoutube(List<SongInfo> list) {
-        ApiMethods.getPlaylistYoutubeSearchResult(YOUTUBE_API_KEY, list, new MyObserver<>("xxx", new MyObserver.MyObserverNextListener<YoutubeSearchResult>() {
+    private void searchYoutube(List<SongInfo> list, int start, int offset) {
+        if (!mCanSearchMore) {
+            return;
+        }
+        mCanSearchMore = false;
+
+        Log.e(TAG, "searchYoutube: " );
+        if (offset > list.size()) {
+            offset = list.size();
+        }
+        List<SongInfo> subList = new ArrayList<>(list.subList(start, offset));
+        mLoadedIndex = offset;
+
+        ApiMethods.getPlaylistYoutubeSearchResult(YOUTUBE_API_KEY, subList, new MyObserver<>("getPlaylistYoutubeSearchResult", new MyObserver.MyObserverNextListener<YoutubeSearchResult>() {
             @Override
             public void onNext(YoutubeSearchResult searchResult) {
                 List<YoutubeSearchResult.YoutubeItem> resultItem = searchResult.getItems();
                 Log.e(TAG, "onNext: mSearchedResult.size: " + resultItem.size() );
                 if (resultItem.size() == 0) {
-                    //Toast.makeText(getActivity(), getString(R.string.youtube_search_no_result), Toast.LENGTH_SHORT).show();
                     Log.e(TAG, "onNext: search no related video " );
                 } else {
                     mSearchedResult.addAll(searchResult.getItems());
@@ -180,9 +194,21 @@ public class YoutubeRelatedSongPlayerFragment extends BaseFragment {
             @Override
             public void onComplete() {
                 Log.e(TAG, "onComplete: " );
-
-                initYoutubePlayerView();
-                initVIew();
+                if (!mIsFirst) {
+                    initYoutubePlayerView();
+                    initVIew();
+                    mIsFirst = true;
+                } else {
+                    if (isAdded()) {
+                        Log.e(TAG, "onComplete: isAdded");
+                        mYouTubePlayer.loadVideos(mSearchedVideoIdList);
+                        mYoutubeSearchResultAdapter.notifyDataSetChanged();
+                        hideLoadingProgressBar();
+                    } else {
+                        Log.e(TAG, "onComplete: isAdded false");
+                    }
+                }
+                mCanSearchMore = true;
             }
         }));
 
@@ -190,12 +216,14 @@ public class YoutubeRelatedSongPlayerFragment extends BaseFragment {
 
     private void initYoutubePlayerView() {
         YouTubePlayerSupportFragment youTubePlayerFragment = YouTubePlayerSupportFragment.newInstance();
-
+        if (!isAdded()) {
+            Log.e(TAG, "initYoutubePlayerView: isAdd == false");
+            return;
+        }
         youTubePlayerFragment.initialize(getResources().getString(R.string.YOUTUBE_API_KEY), new YouTubePlayer.OnInitializedListener() {
 
             @Override
             public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean wasRestored) {
-
                 if (!wasRestored) {
                     mYouTubePlayer = youTubePlayer;
                     youTubePlayer.cueVideos(mSearchedVideoIdList);
@@ -247,6 +275,7 @@ public class YoutubeRelatedSongPlayerFragment extends BaseFragment {
             }
 
         });
+        hideLoadingProgressBar();
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
         transaction.add(R.id.youtube_fragment, youTubePlayerFragment).commit();
 
@@ -260,10 +289,30 @@ public class YoutubeRelatedSongPlayerFragment extends BaseFragment {
 
         mYoutubeSearchResultAdapter = new YoutubeSearchResultAdapter(mSearchedResult, mSearchedResultListener);
         mRecommendSearchResultRecyclerView.setAdapter(mYoutubeSearchResultAdapter);
-        mRecommendSearchResultRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        final LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+
+        mRecommendSearchResultRecyclerView.setLayoutManager(layoutManager);
         mRecommendSearchResultRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL));
 
-        hideLoadingProgressBar();
+        mRecommendSearchResultRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if(layoutManager.findLastVisibleItemPosition() == mSearchedResult.size() - 1){
+                    Log.e(TAG, "onScrollStateChanged: bottom! mLoadedIndex: " + mLoadedIndex);
+                    if (mLoadedIndex < mInputSongList.size()) {
+                        showLoadingProgressBar();
+                        searchYoutube(mInputSongList, mLoadedIndex, mLoadedIndex + 5);
+                    }
+                }
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+            }
+        });
     }
 
     private void playYoutubeVideo(int position) {

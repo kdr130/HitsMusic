@@ -97,6 +97,7 @@ public class ApiMethods {
     }
 
     public static void getPlaylistYoutubeSearchResult(final String developerKey, List<SongInfo> songList, MyObserver observer) {
+
         ApiSubscribe(Observable.fromIterable(songList)
                 .flatMap(new Function<SongInfo, ObservableSource<?>>() {
                     @Override
